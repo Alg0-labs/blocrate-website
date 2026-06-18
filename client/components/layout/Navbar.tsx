@@ -1,10 +1,10 @@
 import React from "react";
-import blocrateLogo from "@/assets/blocrate-logo.png";
+import { BrandLogo } from "@/components/shared/BrandLogo";
 
 const NAV_LINKS = [
-  { href: "/docs", label: "Features" },
-  { href: "/docs", label: "How it Works" },
-  { href: "/docs", label: "Roadmap" },
+  { href: "https://docs.blocrate.com", label: "How it works" },
+  { href: "/features", label: "Features" },
+  { href: "/docs", label: "Docs" },
 ];
 
 interface NavbarProps {
@@ -20,112 +20,108 @@ export const Navbar: React.FC<NavbarProps> = ({
   onJoinWaitlist,
   waitlistInView,
 }) => {
-  const navLinkClass =
-    "text-white text-xs font-medium uppercase tracking-[0.18em] hover:opacity-80 whitespace-nowrap";
+  const linkClass =
+    "text-blocrate-ink/[0.88] text-[15px] font-medium tracking-[-0.01em] hover:text-blocrate-ink transition-opacity whitespace-nowrap";
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-[100] pt-4 sm:pt-6 lg:pt-10 px-4 sm:px-6">
-      <div className="mx-auto w-full max-w-[1076px]">
-        <div
-          className="relative flex items-center justify-between gap-3 px-4 sm:px-6 w-full min-h-[56px] sm:min-h-[62px] rounded-2xl sm:rounded-[35px] backdrop-blur-md"
-          style={{ background: "rgba(25, 26, 27, 0.75)" }}
-        >
-          <div className="flex items-center gap-3 min-w-0 shrink-0">
-            <img src={blocrateLogo} alt="Blocrate" className="h-6 sm:h-8 w-auto" />
-          </div>
+    <nav className="fixed inset-x-0 top-0 z-[100] flex justify-center px-4 pt-4 sm:pt-5">
+      <div
+        className="pointer-events-auto flex w-full max-w-[820px] items-center justify-between rounded-full border px-3 py-2 pl-4 sm:px-4 sm:pl-5"
+        style={{
+          background: "rgba(245,245,247,0.78)",
+          backdropFilter: "saturate(180%) blur(14px)",
+          WebkitBackdropFilter: "saturate(180%) blur(14px)",
+          borderColor: "rgba(0,0,0,0.05)",
+          boxShadow:
+            "0 1px 2px rgba(10,10,12,.04), 0 8px 24px rgba(10,10,12,.05)",
+        }}
+      >
+        <a href="/" className="flex items-center" aria-label="Blocrate home">
+          <BrandLogo size={26} />
+        </a>
 
-          <div className="hidden lg:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 items-center gap-6 xl:gap-10">
-            {NAV_LINKS.map((link) => (
-              <a key={link.label} href={link.href} target="_blank" rel="noopener noreferrer" className={navLinkClass}>
-                {link.label}
-              </a>
-            ))}
-          </div>
-
-          <div className="flex items-center gap-2 shrink-0">
-            {!waitlistInView && (
-              <button
-                type="button"
-                onClick={onJoinWaitlist}
-                className="hidden lg:inline-flex items-center justify-center font-medium text-sm uppercase hover:opacity-90 transition-opacity py-3 sm:py-3.5 px-4 sm:px-6 rounded-2xl sm:rounded-[28px] min-w-[120px] sm:min-w-0 shrink-0"
-                style={{ background: "#A3B0F6", color: "#000", border: "none" }}
-              >
-                JOIN WAITLIST
-              </button>
-            )}
-            <button
-              type="button"
-              onClick={onNavToggle}
-              className="lg:hidden p-2 -mr-2 text-white hover:opacity-80"
-              aria-label="Toggle menu"
-              aria-expanded={navOpen}
+        <div className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-7 lg:flex">
+          {NAV_LINKS.map((link) => (
+            <a
+              key={link.label}
+              href={link.href}
+              target={link.href.startsWith("http") ? "_blank" : undefined}
+              rel={link.href.startsWith("http") ? "noopener noreferrer" : undefined}
+              className={linkClass}
             >
-              {navOpen ? (
-                <svg
-                  className="w-6 h-6"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
-              ) : (
-                <svg
-                  className="w-6 h-6"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M4 6h16M4 12h16M4 18h16"
-                  />
-                </svg>
-              )}
-            </button>
-          </div>
+              {link.label}
+            </a>
+          ))}
         </div>
 
-        {navOpen && (
-          <div
-            className="lg:hidden mt-2 rounded-2xl overflow-hidden px-4 py-3 space-y-1 backdrop-blur-md"
-            style={{ background: "rgba(25, 26, 27, 0.75)" }}
+        <div className="flex items-center gap-2">
+          {!waitlistInView && (
+            <button
+              type="button"
+              onClick={onJoinWaitlist}
+              className="btn btn-primary hidden lg:inline-flex"
+              style={{ fontSize: 14, padding: "9px 18px" }}
+            >
+              Join waitlist
+            </button>
+          )}
+          <button
+            type="button"
+            onClick={onNavToggle}
+            className="p-2 text-blocrate-ink hover:opacity-70 lg:hidden"
+            aria-label="Toggle menu"
+            aria-expanded={navOpen}
           >
-            {NAV_LINKS.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block py-2.5 text-white text-xs font-medium uppercase tracking-[0.18em] hover:opacity-80"
-                onClick={onNavToggle}
-              >
-                {link.label}
-              </a>
-            ))}
-            {!waitlistInView && (
-              <button
-                type="button"
-                onClick={() => {
-                  onJoinWaitlist();
-                  onNavToggle();
-                }}
-                className="w-full flex items-center justify-center font-medium text-sm uppercase py-3 rounded-xl mt-2"
-                style={{ background: "#A3B0F6", color: "#000" }}
-              >
-                JOIN WAITLIST
-              </button>
-            )}
-          </div>
-        )}
+            <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d={navOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"}
+              />
+            </svg>
+          </button>
+        </div>
       </div>
+
+      {navOpen && (
+        <div
+          className="absolute left-4 right-4 top-[72px] space-y-1 rounded-2xl border px-4 py-3 lg:hidden"
+          style={{
+            background: "rgba(255,255,255,0.92)",
+            backdropFilter: "blur(14px)",
+            WebkitBackdropFilter: "blur(14px)",
+            borderColor: "rgba(0,0,0,0.06)",
+            boxShadow: "0 12px 30px rgba(10,10,12,.10)",
+          }}
+        >
+          {NAV_LINKS.map((link) => (
+            <a
+              key={link.label}
+              href={link.href}
+              target={link.href.startsWith("http") ? "_blank" : undefined}
+              rel={link.href.startsWith("http") ? "noopener noreferrer" : undefined}
+              className="block py-2.5 text-[15px] font-medium text-blocrate-ink hover:opacity-70"
+              onClick={onNavToggle}
+            >
+              {link.label}
+            </a>
+          ))}
+          {!waitlistInView && (
+            <button
+              type="button"
+              onClick={() => {
+                onJoinWaitlist();
+                onNavToggle();
+              }}
+              className="btn btn-primary mt-2 w-full"
+              style={{ fontSize: 15, padding: "12px 18px" }}
+            >
+              Join waitlist
+            </button>
+          )}
+        </div>
+      )}
     </nav>
   );
 };

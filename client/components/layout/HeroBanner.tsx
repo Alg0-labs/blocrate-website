@@ -12,7 +12,7 @@ export const HeroBanner: React.FC = () => (
       <p
         className="uppercase text-center w-full whitespace-nowrap overflow-x-auto"
         style={{
-          color: "#5C5C5C",
+          color: "rgba(255,255,255,0.92)",
           fontFamily: '"Montserrat", sans-serif',
           fontOpticalSizing: "auto",
           fontWeight: 400,

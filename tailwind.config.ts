@@ -61,7 +61,7 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
-        // Biocrate custom colors
+        // Biocrate custom colors (legacy — kept for safety)
         biocrate: {
           dark: "#080A0B",
           black: "#000000",
@@ -75,6 +75,30 @@ export default {
           "gray-light": "#F4F4F4",
           "gray-dark": "#5C5C5C",
         },
+        // Blocrate brand kit — light / electric-indigo design system
+        blocrate: {
+          bg: "#ffffff",
+          paper: "#fafafb",
+          ink: "#0a0a0c",
+          "ink-soft": "#6b6b73",
+          "ink-faint": "#a6a6ad",
+          "ink-dim": "#cdced4",
+          hairline: "#ededf0",
+          accent: "#4b3bff", // electric indigo — the one brand accent
+          "accent-soft": "#6f62ff",
+          "accent-dark": "#3d30d4",
+          "accent-ondark": "#9a8fff",
+          gunmetal: "#23252f",
+          "gunmetal-deep": "#0b0c11",
+          gold: "#e6cd92",
+          "gold-deep": "#b8985a",
+          "holo-1": "#8fd9ff",
+          "holo-2": "#a99bff",
+          "holo-3": "#ffd9a0",
+        },
+      },
+      transitionTimingFunction: {
+        brand: "cubic-bezier(.22,.61,.36,1)",
       },
       borderRadius: {
         lg: "var(--radius)",
