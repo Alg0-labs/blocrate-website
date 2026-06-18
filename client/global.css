@@ -1,7 +1,6 @@
 /** @import must precede all other statements */
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Urbanist:wght@300;400;600;700&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Satisfy&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
 
 /* KLG Kaligra: add font files to public/fonts/ (e.g. KLG-Kaligra.woff2, KLG-Kaligra.woff) */
@@ -25,35 +24,47 @@
    * A different format will require also updating the theme in tailwind.config.ts.
   */
   :root {
-    --background: 220 13% 3%;
-    --foreground: 0 0% 100%;
+    /* Blocrate light / electric-indigo design system */
+    --background: 0 0% 100%;
+    --foreground: 240 9% 4%;
 
-    --card: 220 13% 3%;
-    --card-foreground: 0 0% 100%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 9% 4%;
 
-    --popover: 220 13% 3%;
-    --popover-foreground: 0 0% 100%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 9% 4%;
 
-    --primary: 245 60% 40%;
+    --primary: 245 100% 62%; /* electric indigo #4b3bff */
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 245 40% 65%;
-    --secondary-foreground: 220 13% 8%;
+    --secondary: 240 13% 98%;
+    --secondary-foreground: 240 9% 4%;
 
-    --muted: 0 0% 65%;
-    --muted-foreground: 0 0% 65%;
+    --muted: 240 13% 96%;
+    --muted-foreground: 240 4% 44%;
 
-    --accent: 245 40% 65%;
-    --accent-foreground: 220 13% 8%;
+    --accent: 240 13% 96%;
+    --accent-foreground: 240 9% 4%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 0 0% 20%;
-    --input: 0 0% 20%;
-    --ring: 245 60% 40%;
+    --border: 240 8% 93%;
+    --input: 240 8% 90%;
+    --ring: 245 100% 62%;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
+
+    /* brand convenience tokens used by utility classes below */
+    --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+    --ink: #0a0a0c;
+    --ink-soft: #6b6b73;
+    --ink-faint: #a6a6ad;
+    --ink-dim: #cdced4;
+    --hairline: #ededf0;
+    --accent-indigo: #4b3bff;
+    --accent-soft: #6f62ff;
+    --paper: #fafafb;
 
     --sidebar-background: 0 0% 8%;
     --sidebar-foreground: 0 0% 65%;
@@ -122,7 +133,18 @@
 
   body {
     @apply bg-background text-foreground;
-    font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Segoe UI", "Roboto", sans-serif;
+    font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background: rgba(75, 59, 255, 0.16);
+  }
+
+  .font-num {
+    font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-feature-settings: "tnum" 1;
   }
 
   :where(p, span, li, h1, h2, h3, h4, h5, h6, a, button, label, td, th) {
@@ -154,18 +176,15 @@
   }
 }
 
-/* Hero banner hover gradient + left-to-right flow animation */
+/* Hero marquee banner — electric indigo on light */
 .hero-banner-bar {
-  background: #E6F149;
+  background: #4b3bff;
   transition: background 0.35s ease;
 }
 .hero-banner-bar:hover {
-  background: linear-gradient(to right, #E6F24A, #3526A5, #A3B0F6, #E6F24A, #E6F24A, #3526A5, #A3B0F6, #E6F24A) !important;
+  background: linear-gradient(to right, #4b3bff, #6f62ff, #9a8fff, #4b3bff, #4b3bff, #6f62ff, #9a8fff, #4b3bff) !important;
   background-size: 200% 100%;
   animation: bannerGradientFlow 5s linear infinite;
-}
-.hero-banner-bar:hover p {
-  color: #FFFFFF !important;
 }
 @keyframes bannerGradientFlow {
   0% {
@@ -174,6 +193,168 @@
   100% {
     background-position: 100% 50%;
   }
+}
+
+/* ============================================================
+   BLOCRATE BRAND UTILITIES (design system — see figma/ brand kit)
+   ============================================================ */
+
+/* --- Scroll reveal --- */
+.reveal-up {
+  opacity: 0;
+  transform: translateY(26px);
+  transition: opacity 0.9s var(--ease), transform 0.9s var(--ease);
+  will-change: opacity, transform;
+}
+.reveal-up.in {
+  opacity: 1;
+  transform: none;
+}
+.reveal-up.d1 { transition-delay: 0.06s; }
+.reveal-up.d2 { transition-delay: 0.12s; }
+.reveal-up.d3 { transition-delay: 0.18s; }
+.reveal-up.d4 { transition-delay: 0.24s; }
+
+/* --- Backdrop: engineered dot-grid + soft indigo aurora --- */
+.bk-aurora {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(46% 38% at 50% 30%, rgba(75, 59, 255, 0.09) 0%, rgba(75, 59, 255, 0) 66%),
+    radial-gradient(38% 30% at 82% 18%, rgba(120, 150, 255, 0.06) 0%, rgba(120, 150, 255, 0) 60%),
+    radial-gradient(40% 32% at 16% 78%, rgba(150, 130, 255, 0.06) 0%, rgba(150, 130, 255, 0) 60%);
+}
+.bk-dotgrid {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: radial-gradient(rgba(10, 10, 12, 0.06) 1px, transparent 1px);
+  background-size: 28px 28px;
+  -webkit-mask-image: radial-gradient(ellipse 82% 78% at 50% 42%, #000 48%, transparent 100%);
+  mask-image: radial-gradient(ellipse 82% 78% at 50% 42%, #000 48%, transparent 100%);
+}
+
+/* --- Eyebrow (accent bar + uppercase) --- */
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--accent-indigo);
+}
+.eyebrow::before {
+  content: "";
+  width: 24px;
+  height: 1.5px;
+  background: var(--accent-indigo);
+  opacity: 0.55;
+}
+
+/* --- Buttons --- */
+.btn {
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  border-radius: 999px;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 14px 26px;
+  border: 1px solid transparent;
+  transition: transform 0.18s var(--ease), background 0.2s var(--ease),
+    box-shadow 0.2s var(--ease), border-color 0.2s var(--ease), opacity 0.2s var(--ease);
+}
+.btn-primary {
+  background: var(--accent-indigo);
+  color: #fff;
+  box-shadow: 0 1px 2px rgba(75, 59, 255, 0.4), 0 8px 22px rgba(75, 59, 255, 0.28);
+}
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(75, 59, 255, 0.45), 0 12px 30px rgba(75, 59, 255, 0.34);
+}
+.btn-primary:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+.btn-ghost {
+  background: #fff;
+  color: var(--ink);
+  border-color: #e4e4e8;
+  box-shadow: 0 1px 2px rgba(10, 10, 12, 0.04);
+}
+.btn-ghost:hover {
+  transform: translateY(-1px);
+  border-color: #d3d3d9;
+}
+.btn-ghost .arr {
+  transition: transform 0.25s var(--ease);
+}
+.btn-ghost:hover .arr {
+  transform: translateX(3px);
+}
+
+/* --- Announcement pill --- */
+.live-dot {
+  position: relative;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent-indigo);
+  flex: none;
+}
+.live-dot::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  background: rgba(75, 59, 255, 0.4);
+  animation: ping2 2.2s var(--ease) infinite;
+}
+
+/* --- Reading reveal (word-by-word) --- */
+.rr-word {
+  color: var(--ink-dim);
+  transition: color 0.5s var(--ease);
+  will-change: color;
+}
+.rr-word.on { color: var(--ink); }
+.rr-word.key.on { color: var(--accent-indigo); }
+
+/* --- Credit Passport holographic sheen --- */
+.passport-sheen {
+  position: absolute;
+  top: -40%;
+  left: 0;
+  width: 36%;
+  height: 180%;
+  background: linear-gradient(
+    100deg,
+    transparent,
+    rgba(255, 255, 255, 0.13) 45%,
+    rgba(170, 200, 255, 0.18) 55%,
+    transparent
+  );
+  filter: blur(2px);
+  animation: sheen 5.5s var(--ease) infinite;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal-up { transition-duration: 0.001s; }
+  .live-dot::after,
+  .passport-sheen { animation: none; }
 }
 
 /* Waitlist success popup - slides down from top */

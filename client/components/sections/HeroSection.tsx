@@ -1,9 +1,8 @@
 import React from "react";
-import heroSectionVid from "@/assets/hero-section-vid.mp4";
-import heroGlass from "@/assets/Glass.png";
 import { WaitlistForm } from "./WaitlistForm";
 import { Navbar } from "@/components/layout/Navbar";
 import { HeroBanner } from "@/components/layout/HeroBanner";
+import { PassportCard } from "@/components/shared/PassportCard";
 
 interface HeroSectionProps {
   waitlistSectionRef: React.RefObject<HTMLDivElement | null>;
@@ -30,58 +29,56 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   onEmailChange,
   onJoinWaitlist,
 }) => (
-  <>
-    <section className="relative z-50 flex flex-col min-h-screen md:min-h-[100dvh] overflow-visible pt-[72px] sm:pt-[86px] lg:pt-[102px]">
-      <video
-        src={heroSectionVid}
-        autoPlay
-        loop
-        muted
-        playsInline
-        className="absolute inset-0 w-full h-full object-cover opacity-90"
-      />
-      <div className="absolute inset-0 z-[1] pointer-events-none glass-backdrop">
-        <img
-          src={heroGlass}
-          alt=""
-          className="w-full h-full object-cover opacity-90 mix-blend-soft-light"
-        />
-      </div>
-      <div className="absolute inset-0 bg-black/30 z-[2]" />
+  <section className="relative flex min-h-screen flex-col overflow-hidden bg-white pt-[120px] pb-12 sm:pt-[132px]">
+    {/* backdrop: soft indigo aurora + engineered dot grid */}
+    <div className="bk-aurora" />
+    <div className="bk-dotgrid" />
 
-      <Navbar
-        navOpen={navOpen}
-        onNavToggle={onNavToggle}
-        onJoinWaitlist={onScrollToWaitlist}
-        waitlistInView={waitlistInView}
-      />
+    <Navbar
+      navOpen={navOpen}
+      onNavToggle={onNavToggle}
+      onJoinWaitlist={onScrollToWaitlist}
+      waitlistInView={waitlistInView}
+    />
 
-      <div
-        ref={waitlistSectionRef}
-        id="waitlist-section"
-        className="relative z-30 flex flex-1 min-h-0 items-center justify-center px-4 sm:px-6 md:px-10 lg:px-20"
-      >
-        <div className="flex w-full max-w-[791px] flex-col items-center text-center">
-          <h1
-            className="mb-4 sm:mb-6 lg:mb-8 text-center uppercase text-3xl sm:text-4xl md:text-5xl lg:text-[64px] font-semibold leading-tight sm:leading-[1.1] lg:leading-[58px] tracking-tight"
-            style={{
-              color: "#FFF",
-              fontFamily: "Inter, sans-serif",
-              letterSpacing: "-0.03em",
-            }}
-          >
-            CREDIT INFRASTRUCTURE
-            <br />
-            <span style={{ color: "#E6F149" }}>FOR CRYPTO</span>
-          </h1>
+    <div
+      ref={waitlistSectionRef}
+      id="waitlist-section"
+      className="relative z-10 flex flex-1 flex-col items-center justify-center px-5 text-center sm:px-6"
+    >
+      <div className="flex w-full max-w-[820px] flex-col items-center">
+        {/* announcement pill */}
+        <span
+          className="mb-7 inline-flex animate-rise items-center gap-2.5 rounded-full px-3.5 py-1.5 text-[13.5px] font-medium tracking-[-0.01em] opacity-0"
+          style={{
+            background: "rgba(75,59,255,0.06)",
+            border: "1px solid rgba(75,59,255,0.16)",
+            color: "#3d30d4",
+            animationDelay: "0.02s",
+          }}
+        >
+          <span className="live-dot" />
+          Now onboarding launch partners
+        </span>
 
-          <p
-            className="mb-8 sm:mb-10 lg:mb-12 text-center text-sm sm:text-base lg:text-xl text-white max-w-[631px] leading-snug"
-            style={{ fontFamily: "Inter, sans-serif" }}
-          >
-            We help crypto platforms assess credit risk and route loans.
-          </p>
+        <h1
+          className="max-w-[16ch] animate-rise text-[clamp(40px,7vw,84px)] font-semibold leading-[1.02] tracking-[-0.045em] text-blocrate-ink opacity-0"
+          style={{ animationDelay: "0.12s", textWrap: "balance" } as React.CSSProperties}
+        >
+          Credit infrastructure <br className="hidden sm:block" />
+          for <span className="text-blocrate-accent">crypto</span>.
+        </h1>
 
+        <p
+          className="mt-6 max-w-[44ch] animate-rise text-[clamp(16px,1.5vw,20px)] font-normal leading-[1.5] tracking-[-0.01em] text-blocrate-ink-soft opacity-0"
+          style={{ animationDelay: "0.24s" }}
+        >
+          We help crypto platforms assess credit risk and route loans — one
+          portable onchain score, read from every lending protocol and delivered
+          per query via API.
+        </p>
+
+        <div className="mt-9 w-full animate-rise opacity-0" style={{ animationDelay: "0.34s" }}>
           <WaitlistForm
             email={email}
             error={emailError}
@@ -89,12 +86,28 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             onEmailChange={onEmailChange}
             onJoin={onJoinWaitlist}
           />
+          <p className="mt-3 text-[13px] text-blocrate-ink-faint">
+            Join the waitlist — no spam, just early access.
+          </p>
+        </div>
+
+        {/* signature showcase: the Credit Passport */}
+        <div
+          className="relative mt-14 flex w-full animate-fadein justify-center opacity-0 sm:mt-16"
+          style={{ animationDelay: "0.5s" }}
+        >
+          <div
+            className="pointer-events-none absolute left-1/2 top-1/2 -z-0 h-[420px] w-[420px] max-w-[120vw] -translate-x-1/2 -translate-y-1/2"
+            style={{
+              background:
+                "radial-gradient(closest-side, rgba(75,59,255,.12), rgba(120,150,255,.05) 45%, transparent 72%)",
+            }}
+          />
+          <PassportCard float className="relative z-[1] w-[340px] sm:w-[380px]" />
         </div>
       </div>
+    </div>
 
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[400px] sm:w-[600px] lg:w-[800px] h-[200px] sm:h-[300px] lg:h-[400px] bg-purple-600/30 rounded-full blur-3xl z-[1]" />
-
-      <HeroBanner />
-    </section>
-  </>
+    <HeroBanner />
+  </section>
 );
