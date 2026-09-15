@@ -1,0 +1,75 @@
+/**
+ * The reference page is a standalone document; this app also ships a global
+ * Tailwind base plus a few legacy utility classes. The handful of those rules
+ * that bleed into the landing markup are neutralised here so the page renders
+ * exactly like Blocrate_Website_v2_live-3.html. Loaded after blocrate.css.
+ */
+
+/* global.css styles .eyebrow bold with a faded bar; the reference is regular
+   weight with a solid dot */
+.eyebrow {
+  font-weight: 400;
+}
+.eyebrow::before {
+  opacity: 1;
+}
+
+/* global.css centres .btn content and tightens its tracking; the reference
+   does neither */
+.btn {
+  justify-content: normal;
+  letter-spacing: normal;
+}
+
+/* Tailwind's preflight makes every <button> inherit the body line-height; the
+   reference leaves these at the UA default, which changes their box height */
+button.btn,
+.replay {
+  line-height: normal;
+}
+button.btn,
+.burger,
+.replay {
+  -webkit-appearance: auto;
+  appearance: auto;
+}
+
+/* Tailwind generates a `.ring` utility (a blue focus ring) that collides with
+   the orbit's .ring elements */
+.orbit .ring {
+  box-shadow: none;
+}
+
+/* Tailwind's preflight sets img/svg{vertical-align:middle}; the reference
+   leaves them at baseline */
+header.nav svg,
+header.nav img,
+main svg,
+main img,
+footer svg,
+footer img {
+  vertical-align: baseline;
+}
+
+/* Tailwind's preflight forces img{height:auto}, overriding the height attribute
+   the reference relies on: the closing-band wordmark is drawn 360x595, not at
+   its natural ratio */
+img.mark {
+  height: 595px;
+}
+
+/* the app's global base force-breaks long words; the reference does not */
+:where(p, span, li, h1, h2, h3, h4, h5, h6, a, button, label, td, th) {
+  overflow-wrap: normal;
+  word-break: normal;
+}
+body {
+  text-rendering: auto;
+}
+
+/* App chrome that is not part of the reference page must not pick up the
+   reference's blanket section padding: Sonner renders its toast region as a
+   bare <section>, which would otherwise push the whole page down ~260px. */
+section[aria-label^="Notifications"] {
+  padding: 0;
+}
