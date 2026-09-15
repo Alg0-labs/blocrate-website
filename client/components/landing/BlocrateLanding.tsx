@@ -1,706 +1,1252 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import "./blocrate.css";
+import "./blocrate-reset.css";
 import initBlocrate from "./blocrate-init";
 import BlocrateNav from "./BlocrateNav";
-import { useWaitlist } from "@/hooks/use-waitlist";
+import { MARK, TEAM } from "./blocrate-assets";
 
 /**
  * Blocrate landing page.
  *
- * Faithful React port of the self-contained reference design ("index 2.html").
+ * Faithful React port of the self-contained reference design
+ * ("Blocrate_Website_v2_live-3.html").
  * - Markup below is the original page markup, converted to JSX (verbatim, just
  *   class -> className, camelCased SVG attrs, inline styles as objects).
  * - All styling lives in ./blocrate.css (extracted unchanged).
- * - All scroll/flip/canvas animations live in ./blocrate-init.ts and are wired
- *   up once on mount via the effect below.
+ * - The header lives in ./BlocrateNav so the Coming Soon pages share it.
+ * - Reveals, counters, the live statement, the overview tabs, the contact form
+ *   and the hash page switching live in ./blocrate-init.ts and are wired up once
+ *   on mount below.
  */
 export default function BlocrateLanding() {
-  const [accessOpen, setAccessOpen] = useState(false);
-  const {
-    email,
-    showSuccess,
-    error,
-    isSubmitting,
-    handleEmailChange,
-    handleJoin,
-  } = useWaitlist();
-
-  useEffect(() => {
-    const cleanup = initBlocrate();
-    return cleanup;
-  }, []);
-
-  // lock scroll + allow Escape to close the request-access modal
-  useEffect(() => {
-    if (!accessOpen) return;
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setAccessOpen(false);
-    };
-    document.addEventListener("keydown", onKey);
-    return () => {
-      document.body.style.overflow = prev;
-      document.removeEventListener("keydown", onKey);
-    };
-  }, [accessOpen]);
-
-  const openAccess = (e: React.MouseEvent) => {
-    e.preventDefault();
-    setAccessOpen(true);
-  };
-
-  const submitAccess = (e: React.FormEvent) => {
-    e.preventDefault();
-    handleJoin();
-  };
+  useEffect(() => initBlocrate(), []);
 
   return (
     <>
-        <BlocrateNav />
-
-        <main className="hero">
-          <div className="backdrop"></div>
-          <div className="field" id="field"></div>
-          <div className="veil"></div>
-          <div className="flip-stage" id="flipStage">
-            <div className="hub-ring"></div>
-            <div className="flip-glow"></div>
-            <div className="flip-card" id="flipCard">
-              <div className="face front"><img id="faceFront" alt="" /></div>
-              <div className="face back"><img id="faceBack" alt="" /></div>
+      <BlocrateNav />
+      <main data-page="index">
+        <section className="hero">
+          <div className="wash" />
+          <div className="wrap">
+            <div className="eyebrow rv">Proof of income for the stablecoin economy</div>
+            <h1 className="rv d1">Proof of income for people paid in <span className="rot"><span>digital dollars.</span><span>euros.</span><span>USDC.</span><span>stablecoins.</span></span></h1>
+            <p className="lead rv d2">The payslip and bank statement for money that never touched a bank. Blocrate reads the wallet, identifies the payer and issues the statement a bank accepts.</p>
+            <div className="cta-row rv d2">
+              <a className="btn" href="mailto:foundersoffice@blocrate.com?subject=Blocrate%3A%20book%20a%20call">Book a call <span className="arr">→</span></a>
+              <a className="btn ghost" href="#product">How it works <span className="arr">→</span></a>
             </div>
-          </div>
-
-          <span className="pill"><span className="live"></span><span className="full">Now live — the credit layer for onchain lending</span><span className="short">Now live — the credit layer</span></span>
-          <h1>The credit bureau<span className="bk"><br /></span> for the stablecoin<span className="bk"><br /></span> economy.</h1>
-          <p className="sub">Reading on-chain history across every protocol — portable credit scores, delivered per query.</p>
-
-          <div className="cta-row">
-            <button type="button" className="btn btn-primary" onClick={openAccess}>Request access</button>
-            <a href="/docs" className="btn btn-ghost">Read the docs
-              <svg className="arr" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-            </a>
-          </div>
-
-          <div className="trust">
-            <div className="trust-label">Built on data from every major lending protocol</div>
-            <div className="trust-row">
-              <span className="item"><span className="dot"></span>Aave</span>
-              <span className="item"><span className="dot"></span>Morpho</span>
-              <span className="item"><span className="dot"></span>Maple</span>
-              <span className="item"><span className="dot"></span>Compound</span>
-              <span className="item"><span className="dot"></span>Spark</span>
-            </div>
-          </div>
-        </main>
-
-      <div id="s1">
-
-        <div className="spacer"></div>
-
-        <section className="reading" id="reading">
-          <span className="eyebrow"><span className="bar"></span>Why Blocrate</span>
-          <p className="reveal" id="reveal"></p>
-          <div className="closer">
-            <span>One reputation.</span><span className="dot"></span>
-            <span>Every protocol.</span><span className="dot"></span>
-            <span>Wherever you go.</span>
-          </div>
-          <button className="trailer" id="trailerBtn" aria-label="Watch the trailer">
-            <span className="thumb">
-              <canvas className="loop" id="thumbLoop"></canvas>
-              <span className="play"><span><svg width="11" height="13" viewBox="0 0 11 13" fill="#0a0a0c"><path d="M0 0 L11 6.5 L0 13 Z"/></svg></span></span>
-            </span>
-            <span className="tlabel"><span className="t1">Watch the trailer</span><span className="t2">60 seconds · how it works</span></span>
-          </button>
-        </section>
-
-        <section className="showcase" id="showcase">
-          <div className="aura"></div>
-          <div className="dotgrid"></div>
-          <p className="lead">Your whole credit story, in one place.</p>
-          <p className="leadsub">One passport that follows your customers across every way they borrow onchain.</p>
-          <div className="phonewrap">
-            <div className="orbit"><div className="vorb" style={{ left: "-30%", top: "5%" }} data-sz="72" data-dur="9.5" data-fy="-15px"><div className="vorbI"><div className="vchip coin"><img data-k="usdc" alt="" /></div></div></div><div className="vorb" style={{ left: "99%", top: "8%" }} data-sz="68" data-dur="8.8" data-fy="13px"><div className="vorbI"><div className="vchip coin"><img data-k="dai" alt="" /></div></div></div><div className="vorb" style={{ left: "-23%", top: "30%" }} data-sz="60" data-dur="10.2" data-fy="12px"><div className="vorbI"><div className="vchip tile"><img data-k="aave" alt="" /></div></div></div><div className="vorb" style={{ left: "103%", top: "33%" }} data-sz="62" data-dur="9.0" data-fy="-13px"><div className="vorbI"><div className="vchip tile"><img data-k="compound" alt="" /></div></div></div><div className="vorb" style={{ left: "-32%", top: "57%" }} data-sz="54" data-dur="10.6" data-fy="11px"><div className="vorbI"><div className="vchip tile"><img data-k="morpho" alt="" /></div></div></div><div className="vorb" style={{ left: "91%", top: "60%" }} data-sz="56" data-dur="9.4" data-fy="-12px"><div className="vorbI"><div className="vchip tile"><img data-k="maple" alt="" /></div></div></div><div className="vorb" style={{ left: "-15%", top: "83%" }} data-sz="62" data-dur="9.8" data-fy="-13px"><div className="vorbI"><div className="vchip coin"><img data-k="usdt" alt="" /></div></div></div><div className="vorb" style={{ left: "101%", top: "86%" }} data-sz="56" data-dur="11" data-fy="10px"><div className="vorbI"><div className="vchip tile"><img data-k="klarna" alt="" /></div></div></div><div className="vorb" style={{ left: "58%", top: "-7%" }} data-sz="52" data-dur="10.8" data-fy="10px"><div className="vorbI"><div className="vchip tile"><img data-k="euler" alt="" /></div></div></div></div>
-
-            <div className="glow"></div>
-            <div className="phone">
-              <div className="screenwrap">
-                <div className="ui" id="ui">
-      <div className="status">
-            <div className="island"></div>
-            <span className="l">3:22</span>
-            <span className="r">
-              <svg width="18" height="12" viewBox="0 0 18 12" fill="#fff"><rect x="0" y="7" width="3" height="5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg>
-              <span style={{ fontSize: "14px", fontWeight: "600", margin: "0 2px" }}>5G</span>
-              <svg width="26" height="13" viewBox="0 0 26 13" fill="none"><rect x="0.5" y="0.5" width="22" height="12" rx="3.5" stroke="#fff" opacity="0.5"/><rect x="2" y="2" width="16" height="9" rx="1.8" fill="#fff"/><rect x="24" y="4" width="1.5" height="5" rx="0.75" fill="#fff" opacity="0.5"/></svg>
-            </span>
-          </div>
-
-          <div className="toolbar">
-            <div className="avatar">VA<span className="badge"></span></div>
-            <div className="search">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg>
-              Search
-            </div>
-            <div className="tbtn"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="11" width="4" height="9" rx="1"/><rect x="10" y="6" width="4" height="14" rx="1"/><rect x="17" y="9" width="4" height="11" rx="1"/></svg></div>
-            <div className="tbtn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="6" width="20" height="13" rx="2.5"/><line x1="2" y1="10.5" x2="22" y2="10.5"/></svg></div>
-          </div>
-
-          <div className="hero">
-            <div className="label">Credit Passport · vas2.eth</div>
-            <div className="score">810<span className="max">/900</span></div>
-            <div className="pill"><span className="tier"></span>Prime tier</div>
-            <div className="delta">↑ 24 pts this month</div>
-          </div>
-
-          <div className="dots"><span className="d on"></span><span className="d"></span><span className="d"></span><span className="d"></span></div>
-
-          <div className="actions">
-            <div className="action"><div className="circ"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.2" strokeLinecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div><span className="lab">Share</span></div>
-            <div className="action"><div className="circ"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><polyline points="16 3 21 3 21 8"/><line x1="21" y1="3" x2="14" y2="10"/><polyline points="8 21 3 21 3 16"/><line x1="3" y1="21" x2="10" y2="14"/></svg></div><span className="lab">Use</span></div>
-            <div className="action"><div className="circ"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 9 L12 4 L21 9"/><path d="M5 9 V20 H19 V9"/><line x1="3" y1="20" x2="21" y2="20"/></svg></div><span className="lab">Details</span></div>
-            <div className="action"><div className="circ"><svg width="26" height="26" viewBox="0 0 24 24" fill="#fff"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg></div><span className="lab">More</span></div>
-          </div>
-
-          <div className="sheet">
-            <div className="pcard">
-              <div className="sheen"></div>
-              <div className="holo"></div>
-              <div className="pat"><svg viewBox="0 0 300 200" preserveAspectRatio="xMidYMid slice"><path d="M30 30 L90 80 L30 130"/><path className="ac" d="M85 30 L145 80 L85 130"/><path d="M140 30 L200 80 L140 130"/><path className="ac" d="M195 30 L255 80 L195 130"/><path d="M75 70 L135 120 L75 170"/></svg></div>
-              <div className="top">
-                <div className="brand">
-                  <div className="logo"><img id="cardlogo" style={{ height: "19px" }} alt="Blocrate" /></div>
-                  <span className="tg">Credit Passport</span>
+            <div className="frame live rv d3">
+              <button className="replay" type="button">Replay</button>
+              <div className="inner">
+                <div className="panel">
+                  <div className="ph">
+                    <b>Wallet</b>
+                    <span>0x7a3f…9c21</span>
+                  </div>
+                  <div className="inflow">
+                    <div className="av">AL</div>
+                    <div className="who">
+                      <span className="name">Acme Labs GmbH</span>
+                      <span className="addr">0x9b1e…44d0</span>
+                      <small>Monthly salary · Polygon</small>
+                    </div>
+                    <div className="amt">4,200.00 USDC<small>Verified payer</small></div>
+                  </div>
+                  <div className="inflow">
+                    <div className="av">AL</div>
+                    <div className="who">
+                      <span className="name">Acme Labs GmbH</span>
+                      <span className="addr">0x9b1e…44d0</span>
+                      <small>Monthly salary · Polygon</small>
+                    </div>
+                    <div className="amt">4,200.00 USDC<small>On time</small></div>
+                  </div>
+                  <div className="inflow">
+                    <div className="av">AL</div>
+                    <div className="who">
+                      <span className="name">Acme Labs GmbH</span>
+                      <span className="addr">0x9b1e…44d0</span>
+                      <small>Monthly salary · Polygon</small>
+                    </div>
+                    <div className="amt">4,200.00 USDC<small>On time</small></div>
+                  </div>
+                  <div className="status" />
                 </div>
-                <div className="chip"></div>
-              </div>
-              <div className="mid">
-                <div className="holder"><span className="l">Holder</span><span className="n">vas2.eth</span></div>
-                <div className="sc"><span className="l">Score</span><span className="v"><span className="n2">810</span><span className="m">/900</span></span></div>
-              </div>
-            </div>
-
-            <div className="stitle">Recent credit activity</div>
-            <div className="list">
-              <div className="item">
-                <div className="lg" id="lg1"></div>
-                <div className="info"><span className="t">Aave · Repaid in full</span><span className="s">Today, 2:14 PM · on time</span></div>
-                <div className="amt"><span className="a up">+12 pts</span><span className="b">42 / 42 repaid</span></div>
-              </div>
-              <div className="item">
-                <div className="lg" id="lg2"></div>
-                <div className="info"><span className="t">Morpho · Loan opened</span><span className="s">Yesterday · undercollateralised</span></div>
-                <div className="amt"><span className="a">$8,500</span><span className="b">limit unlocked</span></div>
-              </div>
-              <div className="item">
-                <div className="lg" id="lg3"></div>
-                <div className="info"><span className="t">Stablecoin card · Approved</span><span className="s">12 Jun · no deposit</span></div>
-                <div className="amt"><span className="a up">+8 pts</span><span className="b">limit $5,000</span></div>
-              </div>
-            </div>
-          </div>
-
-          <div className="tabs">
-            <div className="tab on"><span className="ti"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="13" rx="2.5"/><line x1="3" y1="9" x2="21" y2="9"/></svg></span>Passport</div>
-            <div className="tab"><span className="ti"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 17 9 11 13 15 21 7"/></svg></span>Score</div>
-            <div className="tab"><span className="ti"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M7 7 H17 M17 7 L13 3 M17 7 L13 11"/><path d="M17 17 H7 M7 17 L11 13 M7 17 L11 21"/></svg></span>Activity</div>
-            <div className="tab"><span className="ti"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="6" width="18" height="13" rx="2.5"/><line x1="3" y1="10.5" x2="21" y2="10.5"/></svg></span>Cards</div>
-            <div className="tab"><span className="ti"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21 c0-4 4-6 8-6 s8 2 8 6"/></svg></span>Profile</div>
-          </div>
+                <div className="doc" role="figure" aria-label="Sample verified income statement">
+                  <div className="head">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80.71 62.69">
+                      <path d="M11.000 51.686 L40.684 21.148 L49.224 28.695 L69.711 11.000" fill="none" stroke="#111" strokeWidth="11.0" />
+                    </svg>
+                    <div className="ref">BR-2026-09-1147</div>
+                  </div>
+                  <div className="ttl">Verified income statement</div>
+                  <div className="row">
+                    <div className="k">Monthly income</div>
+                    <div className="v">
+                      <span>€4,200</span>
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="k">Paid by</div>
+                    <div className="v">
+                      <span>Acme Labs GmbH · verified payer</span>
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="k">History</div>
+                    <div className="v">
+                      <span>14 months, on time every month</span>
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="k">Wallet age</div>
+                    <div className="v">
+                      <span>3 years, 2 months</span>
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="k">Source of funds</div>
+                    <div className="v">
+                      <span>
+                        <span className="ver">Verified</span>
+                      </span>
+                    </div>
+                  </div>
+                  <div className="foot">
+                    <div className="note">Issued by Blocrate · read-only wallet access · no funds held</div>
+                    <div className="seal">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="1178.85 640.83 138.66 106.28">
+                        <path d="M1211.965 703.593 C1210.857 701.265 1210.047 698.716 1209.554 695.935 C1208.200 688.313 1209.598 681.487 1213.754 675.467 C1217.907 669.447 1223.741 665.769 1231.252 664.435 C1236.373 663.526 1241.105 663.890 1245.444 665.524 C1249.785 667.160 1253.285 669.855 1255.949 673.608 L1270.187 661.569 C1265.580 655.462 1259.509 651.024 1251.974 648.253 C1244.438 645.484 1236.514 644.835 1228.209 646.310 C1215.348 648.594 1205.385 654.797 1198.321 664.914 C1191.253 675.034 1188.854 686.466 1191.118 699.210 C1192.390 706.373 1194.932 712.648 1198.740 718.040 C1203.154 713.227 1207.224 708.073 1211.965 703.593 Z" fill="#231F20" />
+                        <path d="M1265.906 704.993 C1264.652 709.368 1262.248 713.144 1258.698 716.322 C1255.146 719.503 1250.875 721.587 1245.888 722.577 C1238.405 724.063 1231.633 722.756 1225.578 718.655 C1223.967 717.565 1222.527 716.342 1221.239 715.005 C1216.885 719.474 1213.095 724.483 1208.943 729.150 C1210.791 730.898 1212.807 732.524 1215.015 734.009 C1225.284 740.927 1236.823 743.114 1249.635 740.570 C1257.911 738.928 1265.057 735.445 1271.072 730.127 C1277.087 724.811 1281.230 718.389 1283.510 710.867 L1265.906 704.993 Z" fill="#231F20" />
+                        <path d="M1188.909 732.503 L1233.979 686.137 L1246.944 697.595 L1278.051 670.729" fill="none" stroke="#3626A7" strokeWidth="17" strokeLinecap="butt" strokeLinejoin="miter" />
+                      </svg>
+                    </div>
+                  </div>
                 </div>
               </div>
-              <img className="frameimg" id="frameimg" alt="" />
             </div>
           </div>
         </section>
-
-        <div className="modal" id="modal" role="dialog" aria-modal="true">
-          <div className="backdrop" id="modalBackdrop"></div>
-          <div className="panel">
-            <button className="close" id="modalClose" aria-label="Close"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></button>
-            <video className="pvideo" id="trailerVideo" playsInline controls preload="none">
-              <source src="/landing.MP4" type="video/mp4" />
-
-              <div className="pinner"><div className="ptitle">Your browser can&rsquo;t play this video.</div><a className="psub" href="/landing.MP4" style={{ color: "#bdb4ff", textDecoration: "underline" }}>Download the trailer (landing.MP4)</a></div>
-            </video>
-          </div>
-        </div>
-
-
-
-      </div>
-      <section id="how">
-        <div className="wbg"></div>
-        <div className="wrap">
-          <div className="head">
-            <span className="eyebrow reveal-up"><span className="bar"></span>How it works</span>
-            <h2 className="reveal-up d1">From on-chain history to a score that <span className="hl">travels</span>.</h2>
-            <p className="hsub reveal-up d2">Three steps turn everything you've done on-chain into credit you can use anywhere.</p>
-          </div>
-
-          <div className="cards">
-            
-            <article className="card light reveal-up">
-              <div className="viz">
-                <svg viewBox="0 0 240 200" aria-hidden="true">
-                  <line className="ln" x1="44" y1="52" x2="120" y2="108"/>
-                  <line className="ln" x1="104" y1="32" x2="120" y2="108"/>
-                  <line className="ln" x1="160" y1="32" x2="120" y2="108"/>
-                  <line className="ln" x1="212" y1="52" x2="120" y2="108"/>
-                  <circle className="pulse" cx="120" cy="108" r="30" fill="none" stroke="rgba(75,59,255,.30)" strokeWidth="1.5"/>
-                  <g className="pg"><rect x="32" y="40" width="24" height="24" rx="7" fill="#fff" stroke="#e6e6ec"/><rect x="40" y="48" width="8" height="8" rx="2.5" fill="none" stroke="#8a7bff" strokeWidth="2"/></g>
-                  <g className="pg"><rect x="92" y="20" width="24" height="24" rx="7" fill="#fff" stroke="#e6e6ec"/><rect x="100" y="28" width="8" height="8" rx="2.5" fill="none" stroke="#2f6bff" strokeWidth="2"/></g>
-                  <g className="pg"><rect x="148" y="20" width="24" height="24" rx="7" fill="#fff" stroke="#e6e6ec"/><rect x="156" y="28" width="8" height="8" rx="2.5" fill="none" stroke="#1aae8f" strokeWidth="2"/></g>
-                  <g className="pg"><rect x="200" y="40" width="24" height="24" rx="7" fill="#fff" stroke="#e6e6ec"/><rect x="208" y="48" width="8" height="8" rx="2.5" fill="none" stroke="#e08a2a" strokeWidth="2"/></g>
-                  <g className="pg"><circle cx="120" cy="108" r="26" fill="#4b3bff"/><path d="M112 98 L126 108 L112 118" fill="none" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/></g>
-                </svg>
+        <section style={{ paddingTop: "20px" }}>
+          <div className="wrap">
+            <div className="stats rv">
+              <div>
+                <div className="n" data-count="308" data-pre="$" data-suf="B">$308B</div>
+                <div className="c">of stablecoins in circulation. Forty times more than in 2020.</div>
               </div>
-              <div className="step">Step 01</div>
-              <h3>Read</h3>
-              <p>We read your full borrowing history across every major lending protocol — Aave, Morpho, Maple and more.</p>
-            </article>
-
-            <div className="flow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><line x1="4" y1="12" x2="20" y2="12"/><polyline points="14 6 20 12 14 18"/></svg></div>
-
-            
-            <article className="card dark reveal-up d1">
-              <div className="hsheen"></div>
-              <div className="viz">
-                <svg viewBox="0 0 240 200" aria-hidden="true">
-                  <defs><linearGradient id="howGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#8fd9ff"/><stop offset="0.55" stopColor="#a99bff"/><stop offset="1" stopColor="#ffd9a0"/></linearGradient></defs>
-                  <circle className="gtrack" cx="120" cy="100" r="74"/>
-                  <circle className="gprog" cx="120" cy="100" r="74"/>
-                </svg>
-                <div className="gnum"><div className="gtop"><span className="v" id="gv">0</span><span className="m">/900</span></div><span className="t">Prime tier</span></div>
+              <div>
+                <div className="n" data-count="400" data-pre="$" data-suf="B">$400B</div>
+                <div className="c">of real payments last year. Double the year before.</div>
               </div>
-              <div className="step">Step 02</div>
-              <h3>Score</h3>
-              <p>It distills into one FICO-style number, 0–900, recalculated in real time as you keep transacting.</p>
-            </article>
-
-            <div className="flow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><line x1="4" y1="12" x2="20" y2="12"/><polyline points="14 6 20 12 14 18"/></svg></div>
-
-            
-            <article className="card light reveal-up d2">
-              <div className="viz">
-                <svg viewBox="0 0 240 200" aria-hidden="true">
-                  <line className="ln" x1="120" y1="100" x2="120" y2="36"/>
-                  <line className="ln" x1="120" y1="100" x2="196" y2="100"/>
-                  <line className="ln" x1="120" y1="100" x2="120" y2="164"/>
-                  <line className="ln" x1="120" y1="100" x2="44" y2="100"/>
-                  <g className="pg"><rect x="92" y="24" width="56" height="22" rx="11" fill="#fff" stroke="#e6e6ec"/><text x="120" y="39" textAnchor="middle" fontFamily="Inter" fontSize="11" fontWeight="600" fill="#3a3a44">Card</text></g>
-                  <g className="pg"><rect x="166" y="89" width="62" height="22" rx="11" fill="#fff" stroke="#e6e6ec"/><text x="197" y="104" textAnchor="middle" fontFamily="Inter" fontSize="11" fontWeight="600" fill="#3a3a44">Loan</text></g>
-                  <g className="pg"><rect x="84" y="154" width="72" height="22" rx="11" fill="#fff" stroke="#e6e6ec"/><text x="120" y="169" textAnchor="middle" fontFamily="Inter" fontSize="10.5" fontWeight="600" fill="#3a3a44">Mortgage</text></g>
-                  <g className="pg"><rect x="14" y="89" width="58" height="22" rx="11" fill="#fff" stroke="#e6e6ec"/><text x="43" y="104" textAnchor="middle" fontFamily="Inter" fontSize="11" fontWeight="600" fill="#3a3a44">BNPL</text></g>
-                  <g className="pg"><rect x="96" y="84" width="48" height="32" rx="8" fill="#15161d"/><path d="M104 95 L114 100 L104 105" fill="none" stroke="#a99bff" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"/><text x="129" y="104" textAnchor="middle" fontFamily="Inter" fontSize="9" fontWeight="700" fill="#fff">810</text></g>
-                </svg>
+              <div>
+                <div className="n" data-count="40" data-suf="%">40%</div>
+                <div className="c">of UK payments to crypto platforms blocked or delayed by banks.</div>
               </div>
-              <div className="step">Step 03</div>
-              <h3>Travel</h3>
-              <p>Your score travels with you — to stablecoin cards, BNPL, loans and mortgages, on-chain or off.</p>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <section id="who">
-        <div className="wbg"></div>
-        <div className="wrap">
-
-          <div className="whead">
-            <span className="eyebrow reveal-up"><span className="bar"></span>Who it's for</span>
-            <h2 className="reveal-up d1">Built for <span className="hl">both sides<svg className="hl-line" viewBox="0 0 220 18" preserveAspectRatio="none" aria-hidden="true"><path className="bleed" d="M4 11 C44 5,86 15,128 9 S196 6,216 10"/><path className="ink" d="M4 11 C44 5,86 15,128 9 S196 6,216 10"/></svg></span> of onchain credit.</h2>
-            <p className="wsub reveal-up d2">Lenders price risk with precision. Borrowers carry one reputation everywhere. The same passport powers both.</p>
-          </div>
-
-          <div className="cols">
-
-            
-            <div className="col dark reveal-up d2">
-              <div className="sheen"></div>
-              <div className="wholo"></div>
-              <svg className="chev" viewBox="0 0 300 200" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-                <path d="M30 30 L90 80 L30 130"/><path className="ac" d="M85 30 L145 80 L85 130"/>
-                <path d="M140 30 L200 80 L140 130"/><path className="ac" d="M195 30 L255 80 L195 130"/>
-                <path d="M75 70 L135 120 L75 170"/>
-              </svg>
-
-              <div className="khead"><span className="ktag">For protocols &amp; lenders</span><span className="seg"></span></div>
-              <div className="ktitle">Price risk with precision.</div>
-
-              <div className="frow">
-                <span className="ic"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3 6 5.5V11c0 4.2 2.7 7.1 6 8.2 3.3-1.1 6-4 6-8.2V5.5L12 3Z"/><path d="M9.2 11.8l2 2 3.6-3.8"/></svg></span>
-                <div><div className="ft">Underwrite undercollateralised</div><div className="fd">Lend against proven on-chain reputation — not just locked collateral.</div></div>
+              <div>
+                <div className="n" data-count="1" data-pre="£" data-suf="B">£1B</div>
+                <div className="c">declined at a single UK exchange in one year.</div>
               </div>
-              <div className="frow">
-                <span className="ic"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 18a8 8 0 0 1 16 0"/><line x1="12" y1="18" x2="16.4" y2="11"/><circle cx="12" cy="18" r="1.5" fill="#b9adff" stroke="none"/></svg></span>
-                <div><div className="ft">Price every borrower exactly</div><div className="fd">A real 0–900 score for risk-based pricing on every position.</div></div>
-              </div>
-              <div className="frow">
-                <span className="ic"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 8 5 12 9 16"/><polyline points="15 8 19 12 15 16"/></svg></span>
-                <div><div className="ft">Integrate in an afternoon</div><div className="fd">One API call per query. Go live the same day, no migration.</div></div>
-              </div>
-              <div className="frow">
-                <span className="ic"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></span>
-                <div><div className="ft">We never hold your risk</div><div className="fd">Blocrate scores; you decide. We never touch capital or custody funds.</div></div>
-              </div>
-
-              <div className="cfoot"><a href="/docs" className="wbtn ghost-d">Read the docs <svg className="warr" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a></div>
             </div>
-
-            
-            <div className="col light reveal-up d3">
-              <div className="wgrid"></div>
-
-              <div className="khead"><span className="ktag">For borrowers</span><span className="seg"></span></div>
-              <div className="ktitle">Carry your reputation everywhere.</div>
-
-              <div className="frow">
-                <span className="ic"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="5" width="18" height="14" rx="2.5"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="7" y1="14.5" x2="12" y2="14.5"/></svg></span>
-                <div><div className="ft">One passport, every app</div><div className="fd">Your history follows you across cards, BNPL, loans and mortgages.</div></div>
+            <p className="builtfor rv d1">Built for <b>banks</b>, <b>fintechs</b>, <b>exchanges</b>, <b>payroll platforms</b> and <b>lenders</b> who have to answer where the money came from.</p>
+          </div>
+        </section>
+        <section>
+          <div className="wrap center">
+            <div className="eyebrow rv">The problem</div>
+            <h2 className="rv d1" style={{ maxWidth: "16em" }}>Millions of people are now paid in a wallet. The bank cannot see it.</h2>
+            <p className="lead measure mt3 rv d2">Remote workers, freelancers, staff at crypto companies. Their salary lands in a digital wallet, not a bank account. The moment they try to use it, one question stops everything: “Where did this money come from?” No payslip, no bank statement, no document a bank accepts. So the money gets blocked, or the answer is no.</p>
+          </div>
+          <div className="wrap">
+            <div className="cards mt6">
+              <div className="card rv">
+                <svg className="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                  <path d="M3 21h18M5 21V9l7-5 7 5v12M9 21v-6h6v6" />
+                </svg>
+                <div>
+                  <div className="t">And the banks have to check. By law.</div>
+                  <div className="d">Every bank, fintech, exchange and lender must verify where money comes from. For income that arrives in a wallet, there is no tool.</div>
+                </div>
               </div>
-              <div className="frow">
-                <span className="ic"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 7.6-1.7"/></svg></span>
-                <div><div className="ft">Borrow more, lock less</div><div className="fd">Good standing unlocks undercollateralised credit — free up your capital.</div></div>
+              <div className="card rv d1">
+                <svg className="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                  <path d="M12 3v18M5 8h14M7 16h10" />
+                </svg>
+                <div>
+                  <div className="t">$85B a year on compliance in EMEA.</div>
+                  <div className="d">98% of institutions say the cost went up again last year. Today’s tool for checking wallet income is a person reading screenshots.</div>
+                </div>
               </div>
-              <div className="frow">
-                <span className="ic"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="9"/><line x1="3" y1="12" x2="21" y2="12"/><path d="M12 3a15 15 0 0 1 0 18 15 15 0 0 1 0-18"/></svg></span>
-                <div><div className="ft">Build once, count everywhere</div><div className="fd">Reputation earned on one protocol travels to all the others.</div></div>
+              <div className="card rv d2">
+                <svg className="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                  <path d="M12 9v4M12 17h.01M10.3 3.9l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.7-3.1l-8-14a2 2 0 0 0-3.4 0z" />
+                </svg>
+                <div>
+                  <div className="t">$504M: the price of getting it wrong.</div>
+                  <div className="d">OKX’s penalty for anti-money-laundering failures, February 2025. The check is not optional and the cost of skipping it is public.</div>
+                </div>
               </div>
-              <div className="frow">
-                <span className="ic"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 4v9"/><path d="M8 11l4 4 4-4"/><path d="M5 19h14"/></svg></span>
-                <div><div className="ft">Bring your offchain credit on</div><div className="fd">Already have a credit history? We bring it onchain with you.</div></div>
-              </div>
-
-              <div className="cfoot"><button type="button" onClick={openAccess} className="wbtn primary">Get your passport <svg className="warr" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button></div>
             </div>
-
+            <p className="tiny mt2">Sources: LexisNexis Risk Solutions, True Cost of Financial Crime Compliance, EMEA, March 2024. US Department of Justice, February 2025.</p>
           </div>
-        </div>
-      </section>
-
-      <section id="market">
-        <div className="wbg"></div>
-        <div className="wrap">
-          <div className="head">
-            <span className="eyebrow"><span className="bar"></span>Who builds on Blocrate</span>
-            <h2>One score opens a market for <span className="hl">everyone who lends</span>.</h2>
-            <p className="lead">Every company that extends credit has the same first question — who am I lending to? Blocrate answers it in a single API call, so a buy-now-pay-later app, a neo-bank, or a centuries-old lender moving on-chain can underwrite from day one: real limits, no deposit, no cold start, no guesswork.</p>
-          </div>
-
-          <div className="bento">
-            
-            <article className="cell wide d1">
-              <div className="viz v-bnpl">
-                <div className="vdot"></div><div className="vau"></div><div className="vfloor"></div>
-                <div className="glow"></div>
-                <div className="pp">
-                  <div className="ppholo"></div>
-                  <svg className="ppchev" viewBox="0 0 300 200" preserveAspectRatio="xMidYMid slice"><path d="M30 30 L90 80 L30 130"/><path className="ac" d="M85 30 L145 80 L85 130"/><path d="M140 30 L200 80 L140 130"/><path className="ac" d="M195 30 L255 80 L195 130"/></svg>
-                  <div className="ppin">
-                    <div className="row" style={{ alignItems: "flex-start" }}><span className="wm"><img className="wmimg" data-wm="white" alt="Blocrate" /></span><span className="chip"></span></div>
-                    <div className="row"><div><span className="ttl">Pay in 4</span><div className="v">vas2.eth</div></div><div style={{ textAlign: "right" }}><span className="ttl">Score</span><div className="scn">810<small>/900</small></div></div></div>
-                  </div>
-                </div>
-                <div className="pl">
-                  <div className="h"><b>$1,200.00</b><span className="ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Approved</span></div>
-                  <div className="tl">
-                    <span className="n done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
-                    <span className="ln fill d1"></span>
-                    <span className="n done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
-                    <span className="ln fill d2"></span>
-                    <span className="n done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
-                    <span className="ln"></span>
-                    <span className="n next"></span>
-                  </div>
-                  <div className="amt"><b>$300</b> × 4 · no credit check</div>
-                </div>
-                <div className="coin usdc cB"><span>USDC</span></div>
+        </section>
+        <section className="band">
+          <div className="wrap">
+            <div className="eyebrow rv">The product</div>
+            <div className="grid">
+              <div className="c7">
+                <h2 className="rv d1">Blocrate turns a wallet into a verified income statement.</h2>
               </div>
-              <div className="cap"><div className="tag">Buy now, pay later</div><h3>Approve shoppers in a blink.</h3><p>Split any checkout into payments, underwritten by a real on-chain score instead of a thin, cold-start guess.</p></div>
-            </article>
-
-            
-            <article className="cell d2">
-              <div className="viz v-neo">
-                <div className="vdot"></div><div className="vau"></div><div className="vfloor"></div>
-                <div className="glow"></div>
-                <div className="app">
-                  <div className="ah"><span className="av">VA</span><span className="nm">Vas Patel<small>Prime tier</small></span></div>
-                  <div className="big"><b>810</b><s>/ 900</s></div>
-                  <div className="barX"><i></i></div>
-                </div>
+              <div className="c4 o9">
+                <p className="lead rv d2">Three steps for the person. One API call for the bank. Minutes, not weeks.</p>
               </div>
-              <div className="cap"><div className="tag">Neo-banks</div><h3>A credit identity from day one.</h3><p>Give every new user a score from their first transaction.</p></div>
-            </article>
-
-            
-            <article className="cell d3">
-              <div className="viz v-card">
-                <div className="vdot"></div><div className="vau"></div><div className="vfloor"></div>
-                <div className="glow"></div>
-                <div className="pp">
-                  <div className="ppholo"></div>
-                  <svg className="ppchev" viewBox="0 0 300 200" preserveAspectRatio="xMidYMid slice"><path d="M30 30 L90 80 L30 130"/><path className="ac" d="M85 30 L145 80 L85 130"/><path d="M140 30 L200 80 L140 130"/></svg>
-                  <div className="ppin">
-                    <div className="row" style={{ alignItems: "flex-start" }}><span className="wm"><img className="wmimg" data-wm="white" alt="Blocrate" /></span><span className="chip"></span></div>
-                    <div className="row"><div><span className="ttl">Holder</span><div className="v">vas2.eth</div></div><div style={{ textAlign: "right" }}><span className="ttl">Limit</span><div className="v">$5,000</div></div></div>
-                  </div>
-                </div>
-                <div className="mpill">No deposit</div>
-                <div className="coin dai cC"><span>DAI</span></div>
-              </div>
-              <div className="cap"><div className="tag">Stablecoin cards</div><h3>Real limits, zero deposit.</h3><p>Issue spending power backed by reputation, not collateral.</p></div>
-            </article>
-
-            
-            <article className="cell wide d4">
-              <div className="viz v-tradfi">
-                <div className="vdot"></div><div className="vau"></div>
-                <div className="recs">
-                  <div className="rec r1"><span className="av"></span><span className="ln"><span></span><span></span></span><span className="bar"></span></div>
-                  <div className="rec r2"><span className="av"></span><span className="ln"><span></span><span></span></span><span className="bar"></span></div>
-                  <div className="rec r3"><span className="av"></span><span className="ln"><span></span><span></span></span><span className="bar"></span></div>
-                </div>
-                <div className="wire"><span className="p"></span></div>
-                <div className="pp seal">
-                  <div className="ppholo"></div>
-                  <svg className="ppchev" viewBox="0 0 300 200" preserveAspectRatio="xMidYMid slice"><path d="M30 30 L90 80 L30 130"/><path className="ac" d="M85 30 L145 80 L85 130"/></svg>
-                  <div className="ppin" style={{ padding: "14% 14%" }}><div className="row" style={{ alignItems: "flex-start" }}><span className="wm" style={{ fontSize: "10px" }}><img className="wmimg" data-wm="white" alt="Blocrate" /></span></div><div className="row"><span className="ttl" style={{ fontSize: "6.5px" }}>On-chain</span><div className="scn" style={{ fontSize: "13px" }}>810</div></div></div>
-                </div>
-              </div>
-              <div className="cap"><div className="tag">Traditional finance, on-chain</div><h3>Bring your whole book on-chain.</h3><p>Move your existing customers — and their entire off-chain credit history — on-chain in an afternoon, no migration, no lost reputation.</p></div>
-            </article>
-
-            
-            <article className="cell d5">
-              <div className="viz v-lend">
-                <div className="vdot"></div><div className="vau"></div><div className="vfloor"></div>
-                <div className="glow"></div>
-                <div className="gauge">
-                  <svg viewBox="0 0 124 124" aria-hidden="true"><defs><linearGradient id="mgrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#8fa0ff"/><stop offset=".5" stopColor="#6354ff"/><stop offset="1" stopColor="#4b3bff"/></linearGradient></defs><circle className="gt" cx="62" cy="62" r="56"/><circle className="gp" cx="62" cy="62" r="56"/></svg>
-                  <div className="gn"><b>810</b><s>Prime</s></div>
-                </div>
-                <div className="apr">APR<b>5.2%</b></div>
-              </div>
-              <div className="cap"><div className="tag">Lending protocols</div><h3>Price every borrower.</h3><p>Lend undercollateralised, with risk priced to the person.</p></div>
-            </article>
-
-            
-            <article className="cell d6">
-              <div className="viz v-home">
-                <div className="vdot"></div><div className="vau"></div><div className="vfloor"></div>
-                <div className="glow"></div>
-                <div className="house">
-                  <svg viewBox="0 0 120 96" fill="none" aria-hidden="true">
-                    <path d="M14 50 L60 16 L106 50" stroke="#4b3bff" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"/>
-                    <path d="M22 46 V84 H98 V46" fill="#fff" stroke="#4b3bff" strokeWidth="4" strokeLinejoin="round"/>
-                    <rect x="50" y="60" width="20" height="24" rx="2" fill="#4b3bff"/>
-                    <rect x="30" y="56" width="13" height="11" rx="2" fill="#cfd0ff"/>
-                    <rect x="77" y="56" width="13" height="11" rx="2" fill="#cfd0ff"/>
-                    <path d="M60 16 L60 8" stroke="#b8985a" strokeWidth="4" strokeLinecap="round"/><circle cx="60" cy="7" r="3.5" fill="#e6cd92"/>
+            </div>
+            <div className="pcards mt6">
+              <div className="pcard rv">
+                <div className="ill">
+                  <svg viewBox="0 0 320 150" fill="none" stroke="#fff" strokeWidth="1.5">
+                    <rect x="20" y="40" width="280" height="44" rx="8" strokeOpacity=".5" />
+                    <text x="36" y="67" fill="#fff" stroke="none" fontSize="14" fontFamily="Hanken Grotesk">0x7a3f 91c0 b4e2 … 9c21</text>
+                    <rect x="240" y="52" width="46" height="20" rx="10" fill="#E6F14A" stroke="none" />
+                    <text x="249" y="66" fill="#000" stroke="none" fontSize="10" fontFamily="Hanken Grotesk" fontWeight="600">READ</text>
+                    <path d="M20 108h180" strokeOpacity=".25" />
+                    <circle cx="20" cy="108" r="3" fill="#E6F14A" stroke="none" />
+                    <text x="32" y="112" fill="#fff" fillOpacity=".6" stroke="none" fontSize="11" fontFamily="Hanken Grotesk">No keys. No funds. Read only.</text>
                   </svg>
-                  <div className="tagk"><span className="d"></span><b>Title · 810 approved</b></div>
+                </div>
+                <div>
+                  <div className="n">01</div>
+                  <div className="t">Connect a wallet</div>
+                  <div className="d">The person shares their wallet address. Read only. Takes a minute.</div>
                 </div>
               </div>
-              <div className="cap"><div className="tag">Real-world &amp; mortgages</div><h3>Underwrite real-world loans.</h3><p>Bring mortgages and RWA lending on-chain with a credit basis.</p></div>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <section id="trust">
-        <div className="wbg"></div>
-        <div className="wrap">
-          
-          <div className="left">
-            <span className="eyebrow reveal-up"><span className="bar"></span>Trust &amp; security</span>
-            <h2 className="reveal-up d1">Trusted by design.</h2>
-            <p className="lead reveal-up d2">Blocrate is infrastructure, not a counterparty. We turn data your borrowers control into one score — and never touch a dollar of capital, or hold a cent of risk.</p>
-
-            <div className="cardwrap reveal-up d3">
-              <div className="glow"></div>
-              <div className="card">
-                <div className="sheen"></div><div className="tholo"></div>
-                <svg className="chev" viewBox="0 0 300 200" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-                  <path d="M30 30 L90 80 L30 130"/><path className="ac" d="M85 30 L145 80 L85 130"/>
-                  <path d="M140 30 L200 80 L140 130"/><path className="ac" d="M195 30 L255 80 L195 130"/>
-                  <path d="M75 70 L135 120 L75 170"/>
-                </svg>
-                <div className="pad">
-                  <div className="top">
-                    <div className="tbk"><span className="wm"><img className="wmimg" data-wm="white" alt="Blocrate" /></span><span className="tg2">Credit Passport</span></div>
-                    <div className="chip"></div>
-                  </div>
-                  <div className="bot">
-                    <div className="tbk"><span className="lbl">Holder</span><span className="nm">vas2.eth</span></div>
-                    <div className="sc"><span className="lbl">Score</span><span className="scv"><span className="scn">810</span><span className="scm">/900</span></span></div>
-                  </div>
+              <div className="pcard rv d1">
+                <div className="ill">
+                  <svg viewBox="0 0 320 150" fill="none" stroke="#fff" strokeWidth="1.5">
+                    <g fontFamily="Hanken Grotesk" fontSize="12" fill="#fff" stroke="none">
+                      <text x="16" y="34" fillOpacity=".6">0x9b1e…44d0</text>
+                      <text x="16" y="79" fillOpacity=".6">0x51aa…0b77</text>
+                      <text x="16" y="124" fillOpacity=".6">0xc3d0…e19f</text>
+                      <text x="200" y="34">Acme Labs GmbH</text>
+                      <text x="200" y="79">Deel payroll</text>
+                      <text x="200" y="124">Upwork</text>
+                    </g>
+                    <path d="M118 30C150 30 150 30 190 30M118 75C150 75 150 75 190 75M118 120C150 120 150 120 190 120" strokeOpacity=".35" />
+                    <circle cx="190" cy="30" r="3" fill="#E6F14A" stroke="none" />
+                    <circle cx="190" cy="75" r="3" fill="#E6F14A" stroke="none" />
+                    <circle cx="190" cy="120" r="3" fill="#E6F14A" stroke="none" />
+                  </svg>
+                </div>
+                <div>
+                  <div className="n">02</div>
+                  <div className="t">We identify real pay</div>
+                  <div className="d">Our engine reads the history and matches each inflow to a verified payer: payroll platforms, employers, client platforms.</div>
+                </div>
+              </div>
+              <div className="pcard rv d2">
+                <div className="ill">
+                  <svg viewBox="0 0 320 150" fill="none" stroke="#fff" strokeWidth="1.5">
+                    <rect x="70" y="14" width="180" height="122" rx="6" fill="#fff" stroke="none" />
+                    <g stroke="#111" strokeOpacity=".9">
+                      <path d="M88 42h70M88 62h144M88 80h144M88 98h144" />
+                    </g>
+                    <g fill="#111" fontFamily="Hanken Grotesk" fontSize="9" stroke="none">
+                      <text x="88" y="36" fontWeight="600">Verified income statement</text>
+                      <text x="88" y="120" fillOpacity=".5">Issued by Blocrate</text>
+                    </g>
+                    <circle cx="222" cy="114" r="12" fill="#3626A7" stroke="none" />
+                    <path d="M216 114l4 4 8-8" stroke="#fff" strokeWidth="2" />
+                  </svg>
+                </div>
+                <div>
+                  <div className="n">03</div>
+                  <div className="t">The bank gets a statement</div>
+                  <div className="d">Amount, regularity, payer, wallet age. Delivered by API or PDF, with an audit trail.</div>
                 </div>
               </div>
             </div>
-          </div>
-
-          
-          <div className="acc">
-            <div className="row open reveal-up d1">
-              <button className="rowhd" aria-expanded="true">
-                <span className="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3 5 6v5c0 4 3 7 7 8 4-1 7-4 7-8V6l-7-3Z"/><path d="M9.3 11.8l1.9 1.9 3.5-3.7"/></svg></span>
-                <span className="rt">Never touches your capital</span><span className="tg"></span>
-              </button>
-              <div className="bd"><div className="bdI"><p>Blocrate scores; you lend. We never custody funds, hold deposits, or take positions — there's no Blocrate wallet anywhere in the loop.</p></div></div>
-            </div>
-
-            <div className="row reveal-up d2">
-              <button className="rowhd" aria-expanded="false">
-                <span className="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M12 4v16M5 8h14"/><path d="M5 8l-3 6a3 3 0 0 0 6 0L5 8Z"/><path d="M19 8l-3 6a3 3 0 0 0 6 0L19 8Z"/></svg></span>
-                <span className="rt">Never holds risk</span><span className="tg"></span>
-              </button>
-              <div className="bd"><div className="bdI"><p>No balance sheet, no book of loans. We're a pure data layer — so our incentives never conflict with the lenders or borrowers we serve.</p></div></div>
-            </div>
-
-            <div className="row reveal-up d3">
-              <button className="rowhd" aria-expanded="false">
-                <span className="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M4 18a8 8 0 0 1 16 0"/><line x1="12" y1="18" x2="16.4" y2="11"/><circle cx="12" cy="18" r="1.4" fill="currentColor" stroke="none"/></svg></span>
-                <span className="rt">A FICO-grade model</span><span className="tg"></span>
-              </button>
-              <div className="bd"><div className="bdI"><p>One transparent, auditable 0–900 model — benchmarked and back-tested against real repayment outcomes, the way traditional credit scoring is.</p></div></div>
-            </div>
-
-            <div className="row reveal-up d4">
-              <button className="rowhd" aria-expanded="false">
-                <span className="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></span>
-                <span className="rt">Privacy-preserving</span><span className="tg"></span>
-              </button>
-              <div className="bd"><div className="bdI"><p>Scores are computed from on-chain history the borrower consents to share, and delivered per request — never warehoused, never resold.</p></div></div>
-            </div>
-
-            <div className="row reveal-up d5">
-              <button className="rowhd" aria-expanded="false">
-                <span className="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 8 5 12 9 16"/><polyline points="15 8 19 12 15 16"/></svg></span>
-                <span className="rt">One audited API</span><span className="tg"></span>
-              </button>
-              <div className="bd"><div className="bdI"><p>A single, security-audited endpoint. Priced per query, live in an afternoon — with SOC&nbsp;2 and formal model audits on the roadmap.</p></div></div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <div id="close">
-        
-        <section className="cta">
-          <div className="grid"></div>
-          <svg className="chev" viewBox="0 0 600 300" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-            <path d="M60 50 L150 150 L60 250"/><path className="ac" d="M150 50 L240 150 L150 250"/>
-            <path d="M240 50 L330 150 L240 250"/><path className="ac" d="M330 50 L420 150 L330 250"/>
-            <path d="M420 50 L510 150 L420 250"/><path className="ac" d="M510 50 L600 150 L510 250"/>
-          </svg>
-          <div className="inner">
-            <span className="eyebrow ru"><span className="clive"></span>Now onboarding partners</span>
-            <h2 className="ru d1">Bring portable credit to your protocol.</h2>
-            <p className="csub ru d2">One API call returns a borrower's 0–900 score. Price risk precisely, lend undercollateralised, and bring your offchain customers onchain — live in an afternoon.</p>
-            <div className="row ru d3">
-              <button type="button" className="cbtn cbtn-primary" onClick={openAccess}>Request access</button>
-              <a href="/docs" className="cbtn cbtn-ghost">Read the docs
-                <svg className="carr" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-              </a>
-            </div>
-            <div className="note ru d3">No commitment · talk to an engineer, not a sales team</div>
+            <p className="lead mt4 rv">We never hold, move or lend money. <span className="ink2">We only verify.</span></p>
           </div>
         </section>
-
-        
-        <footer className="foot">
-          <div className="fwrap">
-            <div className="ftop">
-              <div className="cbrand">
-                <span className="wm"><img className="wmimg" data-wm="black" alt="Blocrate" /></span>
-                <p className="tl">The credit bureau for the stablecoin economy. One portable score, read from every protocol.</p>
-                <div className="soc">
-                  <a href="https://x.com/blocrateglobal" target="_blank" rel="noopener noreferrer" aria-label="X"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.9 3H21l-6.5 7.4L22 21h-5.9l-4.6-6-5.3 6H3l7-8L2.5 3h6l4.2 5.5L18.9 3Zm-2.1 16h1.6L7.3 4.7H5.6L16.8 19Z"/></svg></a>
+        <section>
+          <div className="wrap">
+            <div className="eyebrow rv">Overview</div>
+            <div className="grid">
+              <div className="c8">
+                <h2 className="rv d1">Designed to be used by <span className="acc">compliance teams.</span></h2>
+                <p className="lead mt2 measure rv d2">A verification layer that fits the onboarding flow you already run. Nothing to custody, nothing to license, nothing to explain to the regulator twice.</p>
+              </div>
+            </div>
+            <div className="ov mt6">
+              <ul className="tabs rv">
+                <li>Read-only access</li>
+                <li>Payer identification</li>
+                <li>Regularity and history</li>
+                <li>The statement</li>
+                <li>Audit trail</li>
+              </ul>
+              <div className="orbitwrap rv d1">
+                <div className="orbit">
+                  <div className="ring" />
+                  <div className="ring r2" />
+                  <div className="ring r3" />
+                  <div className="sat">
+                    <i />
+                    <i className="p2" />
+                  </div>
+                  <div className="sat r2">
+                    <i />
+                    <i className="p3" />
+                  </div>
+                  <div className="sat r3">
+                    <i />
+                    <i className="p4" />
+                  </div>
+                  <div className="core">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80.71 62.69">
+                      <path d="M11.000 51.686 L40.684 21.148 L49.224 28.695 L69.711 11.000" fill="none" stroke="#111" strokeWidth="11.0" />
+                    </svg>
+                  </div>
+                </div>
+                <div className="ovtxt">
+                  <div>
+                    <div className="t">Read-only access</div>
+                    <div className="d">The person grants a view of the wallet, never control of it. We hold no keys and no funds, so there is nothing to custody and nothing to lose.</div>
+                  </div>
+                  <div>
+                    <div className="t">Payer identification</div>
+                    <div className="d">Each inflow is matched to a verified payer, from payroll platforms to employers to client platforms. A hex string becomes a name a compliance officer can file.</div>
+                  </div>
+                  <div>
+                    <div className="t">Regularity and history</div>
+                    <div className="d">How much, how often, for how long, and how many months were missed. Measured from the chain, not declared by the applicant.</div>
+                  </div>
+                  <div>
+                    <div className="t">The statement</div>
+                    <div className="d">Monthly income, payer, history, wallet age, source of funds. One document, by API into your flow or as a PDF for the file.</div>
+                  </div>
+                  <div>
+                    <div className="t">Audit trail</div>
+                    <div className="d">Every statement carries the evidence path behind it, so the decision can be defended to an auditor or a regulator later.</div>
+                  </div>
                 </div>
               </div>
-              <div className="col">
-                <h4>Product</h4>
-                <a href="#showcase">Credit Passport</a><a href="#who">For protocols</a><a href="#who">For borrowers</a><a href="#market">Who builds on it</a>
-              </div>
-              <div className="col">
-                <h4>Developers</h4>
-                <a href="/docs">Docs</a><a href="/docs">API reference</a><a href="/status">Status</a><a href="/integrations">Integrations</a>
-              </div>
-              <div className="col">
-                <h4>Company</h4>
-                <a href="#trust">Security</a><a href="/jobs">Careers</a><a href="/blog">Blog</a><a href="/partnership-requests">Contact</a>
-              </div>
-            </div>
-            <div className="fbot">
-              <span className="cp">© 2026 Blocrate, Inc. · Privacy · Terms</span>
-              <span className="built"><b>Built on data from every major lending protocol</b></span>
             </div>
           </div>
-        </footer>
-      </div>
-
-      {/* Request-access modal — captures email into the Supabase waitlist */}
-      <div
-        className={"amodal" + (accessOpen ? " open" : "")}
-        role="dialog"
-        aria-modal="true"
-        aria-hidden={!accessOpen}
-      >
-        <div className="abackdrop" onClick={() => setAccessOpen(false)} />
-        <div className="apanel">
-          <button
-            type="button"
-            className="aclose"
-            aria-label="Close"
-            onClick={() => setAccessOpen(false)}
-          >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round">
-              <line x1="6" y1="6" x2="18" y2="18" />
-              <line x1="18" y1="6" x2="6" y2="18" />
-            </svg>
-          </button>
-
-          {showSuccess ? (
-            <div className="asuccess">
-              <div className="ok">
-                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="20 6 9 17 4 12" />
-                </svg>
+        </section>
+        <section style={{ paddingTop: "0" }}>
+          <div className="wrap">
+            <div className="eyebrow rv">Who it is for</div>
+            <div className="grid">
+              <div className="c8">
+                <h2 className="rv d1">One statement. Five customers.</h2>
+                <p className="lead mt2 measure rv d2">Everyone who has to answer “where did this money come from?” or “how much does this person earn?”</p>
               </div>
-              <h3>You&rsquo;re on the list.</h3>
-              <p className="asub">We&rsquo;ll be in touch when access opens up. Thanks for your interest in Blocrate.</p>
             </div>
-          ) : (
-            <>
-              <span className="aeyebrow">Request access</span>
-              <h3>Bring portable credit to your protocol.</h3>
-              <p className="asub">
-                Drop your email and we&rsquo;ll reach out with API access. No
-                commitment — you&rsquo;ll talk to an engineer, not a sales team.
-              </p>
-              <form onSubmit={submitAccess} noValidate>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={handleEmailChange}
-                  placeholder="you@company.com"
-                  aria-label="Email address"
-                  autoComplete="email"
-                  autoFocus
-                />
-                <button type="submit" className="asubmit" disabled={isSubmitting}>
-                  {isSubmitting ? "Submitting…" : "Request access"}
-                </button>
-              </form>
-              {error && <div className="aerr">{error}</div>}
-            </>
-          )}
+            <div className="cards mt6">
+              <div className="card rv">
+                <div>
+                  <div className="t">Banks and e-money firms</div>
+                  <div className="d">Accept the deposits they block today.</div>
+                </div>
+              </div>
+              <div className="card rv d1">
+                <div>
+                  <div className="t">Fintechs and neobanks</div>
+                  <div className="d">Onboard and lend to customers who earn in stablecoins.</div>
+                </div>
+              </div>
+              <div className="card rv d2">
+                <div>
+                  <div className="t">Exchanges</div>
+                  <div className="d">The source-of-funds check the rules now require.</div>
+                </div>
+              </div>
+              <div className="card rv">
+                <div>
+                  <div className="t">Payroll and payout platforms</div>
+                  <div className="d">Their workers stop getting blocked at the bank.</div>
+                </div>
+              </div>
+              <div className="card rv d1">
+                <div>
+                  <div className="t">Lenders</div>
+                  <div className="d">Underwrite income they cannot see today.</div>
+                </div>
+              </div>
+              <div className="card yel rv d2">
+                <div>
+                  <div className="t">And the worker finally gets a yes.</div>
+                  <div className="d">Verified in minutes. Accepted. The money keeps moving and everyone can prove it.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section style={{ background: "var(--paper)", borderTop: "1px solid var(--line)", borderBottom: "1px solid var(--line)" }}>
+          <div className="wrap">
+            <div className="eyebrow rv">The law</div>
+            <div className="grid">
+              <div className="c8">
+                <h2 className="rv d1">The rules now demand exactly what we produce.</h2>
+                <p className="lead mt2 rv d2">Five deadlines, one question behind all of them.</p>
+              </div>
+            </div>
+            <div className="mt6">
+              <div className="tl">
+                <div className="stage">
+                  <svg viewBox="0 0 1000 420" preserveAspectRatio="none" aria-hidden="true">
+                    <line className="axis" x1="6" y1="210" x2="994" y2="210" />
+                    <line x1="35.1" y1="210" x2="35.1" y2="216" stroke="rgba(0,0,0,.3)" vectorEffect="non-scaling-stroke" />
+                    <line x1="383.8" y1="210" x2="383.8" y2="216" stroke="rgba(0,0,0,.3)" vectorEffect="non-scaling-stroke" />
+                    <line x1="732.5" y1="210" x2="732.5" y2="216" stroke="rgba(0,0,0,.3)" vectorEffect="non-scaling-stroke" />
+                    <g className="today">
+                      <line x1="593.0" y1="200" x2="593.0" y2="290" stroke="#3626A7" vectorEffect="non-scaling-stroke" />
+                    </g>
+                    <g className="ev" style={{ transitionDelay: "0.50s" }}>
+                      <line x1="6.0" y1="198" x2="6.0" y2="180" stroke="rgba(0,0,0,.3)" vectorEffect="non-scaling-stroke" />
+                    </g>
+                    <g className="ev" style={{ transitionDelay: "0.72s" }}>
+                      <line x1="558.1" y1="198" x2="558.1" y2="180" stroke="rgba(0,0,0,.3)" vectorEffect="non-scaling-stroke" />
+                    </g>
+                    <g className="ev" style={{ transitionDelay: "0.94s" }}>
+                      <line x1="616.2" y1="222" x2="616.2" y2="244" stroke="rgba(0,0,0,.3)" vectorEffect="non-scaling-stroke" />
+                    </g>
+                    <g className="ev" style={{ transitionDelay: "1.16s" }}>
+                      <line x1="906.8" y1="198" x2="906.8" y2="180" stroke="rgba(0,0,0,.3)" vectorEffect="non-scaling-stroke" />
+                    </g>
+                    <g className="ev" style={{ transitionDelay: "1.38s" }}>
+                      <line x1="994.0" y1="222" x2="994.0" y2="244" stroke="rgba(0,0,0,.3)" vectorEffect="non-scaling-stroke" />
+                    </g>
+                  </svg>
+                  <div className="ev" style={{ position: "absolute", left: "0.60%", top: "50%", width: "10px", height: "10px", margin: "-5px 0 0 -5px", borderRadius: "50%", background: "#111", border: "1.5px solid #111", transitionDelay: "0.50s" }} />
+                  <div className="ev" style={{ position: "absolute", left: "55.81%", top: "50%", width: "10px", height: "10px", margin: "-5px 0 0 -5px", borderRadius: "50%", background: "#111", border: "1.5px solid #111", transitionDelay: "0.72s" }} />
+                  <div className="ev" style={{ position: "absolute", left: "61.62%", top: "50%", width: "10px", height: "10px", margin: "-5px 0 0 -5px", borderRadius: "50%", background: "#111", border: "1.5px solid #111", transitionDelay: "0.94s" }} />
+                  <div className="ev" style={{ position: "absolute", left: "90.68%", top: "50%", width: "10px", height: "10px", margin: "-5px 0 0 -5px", borderRadius: "50%", background: "#fff", border: "1.5px solid #111", transitionDelay: "1.16s" }} />
+                  <div className="ev" style={{ position: "absolute", left: "99.40%", top: "50%", width: "10px", height: "10px", margin: "-5px 0 0 -5px", borderRadius: "50%", background: "#fff", border: "1.5px solid #111", transitionDelay: "1.38s" }} />
+                  <div className="yr" style={{ left: "3.51%", top: "calc(50% + 14px)" }}>2025</div>
+                  <div className="yr" style={{ left: "38.38%", top: "calc(50% + 14px)" }}>2026</div>
+                  <div className="yr" style={{ left: "73.25%", top: "calc(50% + 14px)" }}>2027</div>
+                  <div className="tdy today" style={{ left: "59.30%", top: "calc(50% + 78px)" }}>TODAY</div>
+                  <div className="blk l" style={{ left: "0.60%", bottom: "calc(50% + 34px)", transitionDelay: "0.70s" }}>
+                    <div className="dt">Dec 2024</div>
+                    <div className="lab">EU Travel Rule</div>
+                    <div className="ds">Every crypto transfer must carry who sent it.</div>
+                  </div>
+                  <div className="blk l" style={{ left: "55.81%", bottom: "calc(50% + 34px)", transitionDelay: "0.92s" }}>
+                    <div className="dt">Jul 2026</div>
+                    <div className="lab">MiCA transition ends</div>
+                    <div className="ds">Every crypto firm in the EU must be licensed and supervised.</div>
+                  </div>
+                  <div className="blk l" style={{ left: "61.62%", top: "calc(50% + 40px)", transitionDelay: "1.14s" }}>
+                    <div className="dt">Sep 2026</div>
+                    <div className="lab">UK FCA gateway opens</div>
+                    <div className="ds">UK crypto firms start applying for authorisation.</div>
+                  </div>
+                  <div className="blk r" style={{ right: "9.32%", bottom: "calc(50% + 34px)", transitionDelay: "1.36s" }}>
+                    <div className="dt">Jul 2027</div>
+                    <div className="lab">EU AML Regulation</div>
+                    <div className="ds">New rulebook, plus AMLA, a new EU anti-money-laundering authority.</div>
+                  </div>
+                  <div className="blk r" style={{ right: "0.60%", top: "calc(50% + 40px)", transitionDelay: "1.58s" }}>
+                    <div className="dt">Oct 2027</div>
+                    <div className="lab">UK crypto regime live</div>
+                    <div className="ds">Full FCA rules apply to every UK crypto business.</div>
+                  </div>
+                </div>
+                <div className="list">
+                  <div className="it">
+                    <div className="dt">Dec 2024</div>
+                    <div>
+                      <div className="lab">EU Travel Rule</div>
+                      <div className="ds">Every crypto transfer must carry who sent it.</div>
+                    </div>
+                  </div>
+                  <div className="it">
+                    <div className="dt">Jul 2026</div>
+                    <div>
+                      <div className="lab">MiCA transition ends</div>
+                      <div className="ds">Every crypto firm in the EU must be licensed and supervised.</div>
+                    </div>
+                  </div>
+                  <div className="it">
+                    <div className="dt">Sep 2026</div>
+                    <div>
+                      <div className="lab">UK FCA gateway opens</div>
+                      <div className="ds">UK crypto firms start applying for authorisation.</div>
+                    </div>
+                  </div>
+                  <div className="it">
+                    <div className="dt">Jul 2027</div>
+                    <div>
+                      <div className="lab">EU AML Regulation</div>
+                      <div className="ds">New rulebook, plus AMLA, a new EU anti-money-laundering authority.</div>
+                    </div>
+                  </div>
+                  <div className="it">
+                    <div className="dt">Oct 2027</div>
+                    <div>
+                      <div className="lab">UK crypto regime live</div>
+                      <div className="ds">Full FCA rules apply to every UK crypto business.</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <p className="mt3 rv">Every one of them forces the same question: <b>“Where did this money come from?”</b></p>
+            <p className="tiny mt1">Regulation (EU) 2023/1113. ESMA statement on MiCA transitional periods, Apr 2026. FCA PS26/9, 30 Jun 2026. Regulation (EU) 2024/1624.</p>
+          </div>
+        </section>
+        <section>
+          <div className="wrap">
+            <div className="eyebrow rv">The moment</div>
+            <div className="grid">
+              <div className="c8">
+                <h2 className="rv d1">This summer, Europe switched on.</h2>
+                <p className="lead mt2 measure rv d2">Every one of these payments will need to be proven to a bank.</p>
+              </div>
+            </div>
+            <div className="news mt6">
+              <div className="rv">
+                <div className="dt">26 Aug 2026</div>
+                <div className="t">Revolut</div>
+                <div className="d">Launched EURR, a euro stablecoin, inside an app with 80M customers. 16M of them already use crypto.</div>
+              </div>
+              <div className="rv d1">
+                <div className="dt">June 2026</div>
+                <div className="t">Deel</div>
+                <div className="d">The payroll company behind 40,000 businesses and 1.5M workers launched its own payroll stablecoin. Live in 80+ countries.</div>
+              </div>
+              <div className="rv d2">
+                <div className="dt">H2 2026</div>
+                <div className="t">Ten banks</div>
+                <div className="d">ING, UniCredit, CaixaBank and seven other European banks are issuing a euro stablecoin through a joint venture, Qivalis.</div>
+              </div>
+              <div className="rv d3">
+                <div className="dt">2026</div>
+                <div className="t">Rise</div>
+                <div className="d">$1.37B of payroll processed for contractors. More than half of it withdrawn as stablecoins.</div>
+              </div>
+            </div>
+            <p className="tiny mt2">Sources: CoinDesk, 26 Aug 2026. Stripe newsroom and The Defiant, Jun and Aug 2026. Ledger Insights and CaixaBank, 2025. Rise Q1 2026 Stablecoin Payroll Report.</p>
+          </div>
+        </section>
+        <section style={{ paddingTop: "0" }}>
+          <div className="wrap">
+            <div className="grid">
+              <div className="c4">
+                <div className="eyebrow rv">FAQ</div>
+                <h2 className="rv d1">Common questions.</h2>
+                <p className="lead mt2 rv d2">Something else on your mind? <a href="#contact" className="acc">Talk to us</a>.</p>
+              </div>
+              <div className="c7 o6">
+                <div className="faq rv d1">
+                  <details>
+                    <summary>Do you hold, move or lend money?</summary>
+                    <div className="a">No. Blocrate takes read-only access to a wallet the person chooses to share. We never hold keys or funds, never move anything and never lend. We only verify.</div>
+                  </details>
+                  <details>
+                    <summary>What does the bank actually receive?</summary>
+                    <div className="a">A verified income statement: monthly income, the payer named and verified, history and regularity, wallet age, and a source-of-funds verdict. Delivered by API into your onboarding flow or as a PDF, with the audit trail behind it.</div>
+                  </details>
+                  <details>
+                    <summary>How is this different from a wallet risk score?</summary>
+                    <div className="a">Risk tools flag a wallet and walk away. They will not say whose salary it is or put their name behind it. Blocrate identifies the payer and issues a document a compliance team can file.</div>
+                  </details>
+                  <details>
+                    <summary>Do you need a licence to operate?</summary>
+                    <div className="a">Not to start. Blocrate is a verification service, not a bank, a lender or a custodian. We fit inside the checks you already have to run.</div>
+                  </details>
+                  <details>
+                    <summary>How long does a check take?</summary>
+                    <div className="a">Minutes. The person shares the address, the engine reads the history and matches inflows to verified payers, and the statement is issued.</div>
+                  </details>
+                  <details>
+                    <summary>Where are you based?</summary>
+                    <div className="a">London. A UK entity, Europe first, with India through a partner.</div>
+                  </details>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section className="close">
+          <div className="bloom" />
+          <div className="wrap">
+            <div className="grid">
+              <div className="c8">
+                <h2 className="rv">The money keeps moving. Everyone can prove it.</h2>
+                <p className="lead mt2 rv d1 measure">See how Blocrate fits into your onboarding flow. Live walkthrough, no commitment.</p>
+                <div className="cta-row rv d2">
+                  <a className="btn" href="mailto:foundersoffice@blocrate.com?subject=Blocrate%3A%20book%20a%20call">Book a call <span className="arr">→</span></a>
+                  <a className="btn ghost" href="#product">See the product <span className="arr">→</span></a>
+                </div>
+              </div>
+            </div>
+            <img className="mark" src={MARK} alt="" width="796" height="595" />
+          </div>
+        </section>
+      </main>
+      <main data-page="product" hidden>
+        <section className="hero sub">
+          <div className="wash" />
+          <div className="wrap">
+            <div className="eyebrow rv">Product</div>
+            <h1 className="rv d1">A wallet in. <span className="acc">A statement out.</span></h1>
+            <p className="lead rv d2">Read the wallet. Identify the payer. Issue the statement a bank accepts. Minutes, not weeks.</p>
+            <div className="cta-row rv d2">
+              <a className="btn" href="mailto:foundersoffice@blocrate.com?subject=Blocrate%3A%20book%20a%20call">Book a call <span className="arr">→</span></a>
+            </div>
+            <div className="frame live rv d3">
+              <button className="replay" type="button">Replay</button>
+              <div className="inner">
+                <div className="panel">
+                  <div className="ph">
+                    <b>Wallet</b>
+                    <span>0x7a3f…9c21</span>
+                  </div>
+                  <div className="inflow">
+                    <div className="av">AL</div>
+                    <div className="who">
+                      <span className="name">Acme Labs GmbH</span>
+                      <span className="addr">0x9b1e…44d0</span>
+                      <small>Monthly salary · Polygon</small>
+                    </div>
+                    <div className="amt">4,200.00 USDC<small>Verified payer</small></div>
+                  </div>
+                  <div className="inflow">
+                    <div className="av">AL</div>
+                    <div className="who">
+                      <span className="name">Acme Labs GmbH</span>
+                      <span className="addr">0x9b1e…44d0</span>
+                      <small>Monthly salary · Polygon</small>
+                    </div>
+                    <div className="amt">4,200.00 USDC<small>On time</small></div>
+                  </div>
+                  <div className="inflow">
+                    <div className="av">AL</div>
+                    <div className="who">
+                      <span className="name">Acme Labs GmbH</span>
+                      <span className="addr">0x9b1e…44d0</span>
+                      <small>Monthly salary · Polygon</small>
+                    </div>
+                    <div className="amt">4,200.00 USDC<small>On time</small></div>
+                  </div>
+                  <div className="status" />
+                </div>
+                <div className="doc" role="figure" aria-label="Sample verified income statement">
+                  <div className="head">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80.71 62.69">
+                      <path d="M11.000 51.686 L40.684 21.148 L49.224 28.695 L69.711 11.000" fill="none" stroke="#111" strokeWidth="11.0" />
+                    </svg>
+                    <div className="ref">BR-2026-09-1147</div>
+                  </div>
+                  <div className="ttl">Verified income statement</div>
+                  <div className="row">
+                    <div className="k">Monthly income</div>
+                    <div className="v">
+                      <span>€4,200</span>
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="k">Paid by</div>
+                    <div className="v">
+                      <span>Acme Labs GmbH · verified payer</span>
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="k">History</div>
+                    <div className="v">
+                      <span>14 months, on time every month</span>
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="k">Wallet age</div>
+                    <div className="v">
+                      <span>3 years, 2 months</span>
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="k">Source of funds</div>
+                    <div className="v">
+                      <span>
+                        <span className="ver">Verified</span>
+                      </span>
+                    </div>
+                  </div>
+                  <div className="foot">
+                    <div className="note">Issued by Blocrate · read-only wallet access · no funds held</div>
+                    <div className="seal">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="1178.85 640.83 138.66 106.28">
+                        <path d="M1211.965 703.593 C1210.857 701.265 1210.047 698.716 1209.554 695.935 C1208.200 688.313 1209.598 681.487 1213.754 675.467 C1217.907 669.447 1223.741 665.769 1231.252 664.435 C1236.373 663.526 1241.105 663.890 1245.444 665.524 C1249.785 667.160 1253.285 669.855 1255.949 673.608 L1270.187 661.569 C1265.580 655.462 1259.509 651.024 1251.974 648.253 C1244.438 645.484 1236.514 644.835 1228.209 646.310 C1215.348 648.594 1205.385 654.797 1198.321 664.914 C1191.253 675.034 1188.854 686.466 1191.118 699.210 C1192.390 706.373 1194.932 712.648 1198.740 718.040 C1203.154 713.227 1207.224 708.073 1211.965 703.593 Z" fill="#231F20" />
+                        <path d="M1265.906 704.993 C1264.652 709.368 1262.248 713.144 1258.698 716.322 C1255.146 719.503 1250.875 721.587 1245.888 722.577 C1238.405 724.063 1231.633 722.756 1225.578 718.655 C1223.967 717.565 1222.527 716.342 1221.239 715.005 C1216.885 719.474 1213.095 724.483 1208.943 729.150 C1210.791 730.898 1212.807 732.524 1215.015 734.009 C1225.284 740.927 1236.823 743.114 1249.635 740.570 C1257.911 738.928 1265.057 735.445 1271.072 730.127 C1277.087 724.811 1281.230 718.389 1283.510 710.867 L1265.906 704.993 Z" fill="#231F20" />
+                        <path d="M1188.909 732.503 L1233.979 686.137 L1246.944 697.595 L1278.051 670.729" fill="none" stroke="#3626A7" strokeWidth="17" strokeLinecap="butt" strokeLinejoin="miter" />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section className="band">
+          <div className="wrap">
+            <div className="eyebrow rv">How it works</div>
+            <div className="grid">
+              <div className="c7">
+                <h2 className="rv d1">Three steps. One API call.</h2>
+              </div>
+            </div>
+            <div className="pcards mt6">
+              <div className="pcard rv">
+                <div className="ill">
+                  <svg viewBox="0 0 320 150" fill="none" stroke="#fff" strokeWidth="1.5">
+                    <rect x="20" y="40" width="280" height="44" rx="8" strokeOpacity=".5" />
+                    <text x="36" y="67" fill="#fff" stroke="none" fontSize="14" fontFamily="Hanken Grotesk">0x7a3f 91c0 b4e2 … 9c21</text>
+                    <rect x="240" y="52" width="46" height="20" rx="10" fill="#E6F14A" stroke="none" />
+                    <text x="249" y="66" fill="#000" stroke="none" fontSize="10" fontFamily="Hanken Grotesk" fontWeight="600">READ</text>
+                    <path d="M20 108h180" strokeOpacity=".25" />
+                    <circle cx="20" cy="108" r="3" fill="#E6F14A" stroke="none" />
+                    <text x="32" y="112" fill="#fff" fillOpacity=".6" stroke="none" fontSize="11" fontFamily="Hanken Grotesk">No keys. No funds. Read only.</text>
+                  </svg>
+                </div>
+                <div>
+                  <div className="n">01</div>
+                  <div className="t">Connect a wallet</div>
+                  <div className="d">The person shares their wallet address. Read only: we never take keys, never move funds, never hold anything.</div>
+                </div>
+              </div>
+              <div className="pcard rv d1">
+                <div className="ill">
+                  <svg viewBox="0 0 320 150" fill="none" stroke="#fff" strokeWidth="1.5">
+                    <g fontFamily="Hanken Grotesk" fontSize="12" fill="#fff" stroke="none">
+                      <text x="16" y="34" fillOpacity=".6">0x9b1e…44d0</text>
+                      <text x="16" y="79" fillOpacity=".6">0x51aa…0b77</text>
+                      <text x="16" y="124" fillOpacity=".6">0xc3d0…e19f</text>
+                      <text x="200" y="34">Acme Labs GmbH</text>
+                      <text x="200" y="79">Deel payroll</text>
+                      <text x="200" y="124">Upwork</text>
+                    </g>
+                    <path d="M118 30C150 30 150 30 190 30M118 75C150 75 150 75 190 75M118 120C150 120 150 120 190 120" strokeOpacity=".35" />
+                    <circle cx="190" cy="30" r="3" fill="#E6F14A" stroke="none" />
+                    <circle cx="190" cy="75" r="3" fill="#E6F14A" stroke="none" />
+                    <circle cx="190" cy="120" r="3" fill="#E6F14A" stroke="none" />
+                  </svg>
+                </div>
+                <div>
+                  <div className="n">02</div>
+                  <div className="t">We identify real pay</div>
+                  <div className="d">Each inflow is matched to a verified payer. Regularity, amounts and wallet age are measured, not declared.</div>
+                </div>
+              </div>
+              <div className="pcard rv d2">
+                <div className="ill">
+                  <svg viewBox="0 0 320 150" fill="none" stroke="#fff" strokeWidth="1.5">
+                    <rect x="70" y="14" width="180" height="122" rx="6" fill="#fff" stroke="none" />
+                    <g stroke="#111" strokeOpacity=".9">
+                      <path d="M88 42h70M88 62h144M88 80h144M88 98h144" />
+                    </g>
+                    <g fill="#111" fontFamily="Hanken Grotesk" fontSize="9" stroke="none">
+                      <text x="88" y="36" fontWeight="600">Verified income statement</text>
+                      <text x="88" y="120" fillOpacity=".5">Issued by Blocrate</text>
+                    </g>
+                    <circle cx="222" cy="114" r="12" fill="#3626A7" stroke="none" />
+                    <path d="M216 114l4 4 8-8" stroke="#fff" strokeWidth="2" />
+                  </svg>
+                </div>
+                <div>
+                  <div className="n">03</div>
+                  <div className="t">The bank gets a statement</div>
+                  <div className="d">Amount, regularity, payer, wallet age, source of funds. API into your flow, or a PDF your compliance team can file.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section>
+          <div className="wrap">
+            <div className="eyebrow rv">The statement</div>
+            <div className="grid">
+              <div className="c8">
+                <h2 className="rv d1">What a bank actually receives.</h2>
+              </div>
+            </div>
+            <div className="ledger two mt6 rv d1">
+              <div className="row">
+                <div className="k">Monthly income</div>
+                <div className="a">Verified inflows, normalised to a monthly figure.</div>
+              </div>
+              <div className="row">
+                <div className="k">Paid by</div>
+                <div className="a">The payer, named and verified, not a hex string.</div>
+              </div>
+              <div className="row">
+                <div className="k">History</div>
+                <div className="a">How long, how regular, how many missed months.</div>
+              </div>
+              <div className="row">
+                <div className="k">Wallet age</div>
+                <div className="a">A wallet opened three years ago is not a wallet opened last week.</div>
+              </div>
+              <div className="row">
+                <div className="k">Source of funds</div>
+                <div className="a">The verdict, with the evidence behind it available on request.</div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section style={{ background: "var(--paper)", borderTop: "1px solid var(--line)", borderBottom: "1px solid var(--line)" }}>
+          <div className="wrap">
+            <div className="eyebrow rv">What changes</div>
+            <div className="grid">
+              <div className="c8">
+                <h2 className="rv d1">What changes when Blocrate exists.</h2>
+              </div>
+            </div>
+            <div className="ledger mt6 rv d1">
+              <div className="row" style={{ padding: "10px 0" }}>
+                <div className="h" />
+                <div className="h">Today</div>
+                <div className="h acc" style={{ color: "var(--acc)" }}>With Blocrate</div>
+              </div>
+              <div className="row">
+                <div className="k">The worker</div>
+                <div className="a">Blocked, or asked for screenshots.</div>
+                <div className="b">Verified in minutes. Accepted.</div>
+              </div>
+              <div className="row">
+                <div className="k">The bank or fintech</div>
+                <div className="a">A manual review, or a decline.</div>
+                <div className="b">One API call, with an audit trail.</div>
+              </div>
+              <div className="row">
+                <div className="k">The lender</div>
+                <div className="a">Cannot see the income. Says no.</div>
+                <div className="b">Underwrites a customer it could not before.</div>
+              </div>
+              <div className="row">
+                <div className="k">The payroll platform</div>
+                <div className="a">Workers churn when banks block them.</div>
+                <div className="b">Workers keep getting paid this way.</div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section>
+          <div className="wrap">
+            <div className="eyebrow rv">Why nobody else does this</div>
+            <div className="grid">
+              <div className="c8">
+                <h2 className="rv d1">Nobody issues this statement today.</h2>
+              </div>
+            </div>
+            <div className="grid mt6">
+              <div className="c8 o2 rv d1">
+                <div className="quad">
+                  <div>
+                    <div className="t">Plaid, Truv, Argyle, Equifax Work Number</div>
+                    <div className="d">Verify salaries from banks and payroll. The moment pay lands in a wallet, they go blind.</div>
+                  </div>
+                  <div>
+                    <div className="t"><svg xmlns="http://www.w3.org/2000/svg" viewBox="1178.85 640.83 138.66 106.28"><path d="M1211.965 703.593 C1210.857 701.265 1210.047 698.716 1209.554 695.935 C1208.200 688.313 1209.598 681.487 1213.754 675.467 C1217.907 669.447 1223.741 665.769 1231.252 664.435 C1236.373 663.526 1241.105 663.890 1245.444 665.524 C1249.785 667.160 1253.285 669.855 1255.949 673.608 L1270.187 661.569 C1265.580 655.462 1259.509 651.024 1251.974 648.253 C1244.438 645.484 1236.514 644.835 1228.209 646.310 C1215.348 648.594 1205.385 654.797 1198.321 664.914 C1191.253 675.034 1188.854 686.466 1191.118 699.210 C1192.390 706.373 1194.932 712.648 1198.740 718.040 C1203.154 713.227 1207.224 708.073 1211.965 703.593 Z" fill="#231F20" /><path d="M1265.906 704.993 C1264.652 709.368 1262.248 713.144 1258.698 716.322 C1255.146 719.503 1250.875 721.587 1245.888 722.577 C1238.405 724.063 1231.633 722.756 1225.578 718.655 C1223.967 717.565 1222.527 716.342 1221.239 715.005 C1216.885 719.474 1213.095 724.483 1208.943 729.150 C1210.791 730.898 1212.807 732.524 1215.015 734.009 C1225.284 740.927 1236.823 743.114 1249.635 740.570 C1257.911 738.928 1265.057 735.445 1271.072 730.127 C1277.087 724.811 1281.230 718.389 1283.510 710.867 L1265.906 704.993 Z" fill="#231F20" /><path d="M1188.909 732.503 L1233.979 686.137 L1246.944 697.595 L1278.051 670.729" fill="none" stroke="#231F20" strokeWidth="17" strokeLinecap="butt" strokeLinejoin="miter" /></svg>Blocrate</div>
+                    <div className="d">Reads the wallet. Identifies the payer. Signs the statement a bank accepts.</div>
+                  </div>
+                  <div>
+                    <div className="t">Sumsub, CoinTracking</div>
+                    <div className="d">Collect what the user uploads. Nothing verified, nothing a bank will accept.</div>
+                  </div>
+                  <div>
+                    <div className="t">Chainalysis, Elliptic, TRM · Cred Protocol, Spectral</div>
+                    <div className="d">Score wallet risk and walk away. None will say whose salary it is, or put their name behind it.</div>
+                  </div>
+                </div>
+                <div className="axl">
+                  <span>Does not read wallets</span>
+                  <span>Reads wallets</span>
+                </div>
+              </div>
+            </div>
+            <div className="cards mt6">
+              <div className="card rv">
+                <div>
+                  <div className="t">What we do that they will not</div>
+                  <div className="d">Put our name on wallet income and hand the bank a document it can file.</div>
+                </div>
+              </div>
+              <div className="card rv d1">
+                <div>
+                  <div className="t">Their flaw</div>
+                  <div className="d">Bureaus cannot see wallets. Chain tools see wallets but will not vouch.</div>
+                </div>
+              </div>
+              <div className="card rv d2">
+                <div>
+                  <div className="t">Why it compounds</div>
+                  <div className="d">Every check adds a verified payer to the registry. The registry is the moat.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section className="band">
+          <div className="wrap">
+            <div className="grid">
+              <div className="c5">
+                <div className="eyebrow rv">Posture</div>
+                <h2 className="rv d1">What we never do.</h2>
+              </div>
+              <div className="c6 o7">
+                <div className="ledger two rv d1">
+                  <div className="row">
+                    <div className="k">No custody</div>
+                    <div className="a">Read-only wallet access. We never hold keys or funds.</div>
+                  </div>
+                  <div className="row">
+                    <div className="k">No lending</div>
+                    <div className="a">We do not lend, so we have no stake in the answer.</div>
+                  </div>
+                  <div className="row">
+                    <div className="k">No licence to start</div>
+                    <div className="a">A verification service, not a financial institution. We start where you are.</div>
+                  </div>
+                  <div className="row">
+                    <div className="k">Audit trail</div>
+                    <div className="a">Every statement carries the evidence path behind it, for your compliance file.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="grid mt6">
+              <div className="c8">
+                <div className="eyebrow rv">Where this goes</div>
+                <h3 className="rv d1" style={{ fontSize: "var(--h2)" }}>Every check builds the file. The file becomes the bureau.</h3>
+                <p className="lead mt2 measure rv d2">Who pays whom, how much, how often, for how long: a registry of verified payers that compounds with every check. A credit file and score for people the bureaus cannot see.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section className="close">
+          <div className="bloom" />
+          <div className="wrap">
+            <div className="grid">
+              <div className="c8">
+                <h2 className="rv">See it run on your flow.</h2>
+                <p className="lead mt2 rv d1 measure">A live walkthrough on your own onboarding, no commitment.</p>
+                <div className="cta-row rv d2">
+                  <a className="btn" href="mailto:foundersoffice@blocrate.com?subject=Blocrate%3A%20book%20a%20call">Book a call <span className="arr">→</span></a>
+                  <a className="btn ghost" href="#contact">Contact <span className="arr">→</span></a>
+                </div>
+              </div>
+            </div>
+            <img className="mark" src={MARK} alt="" width="796" height="595" />
+          </div>
+        </section>
+      </main>
+      <main data-page="company" hidden>
+        <section className="hero sub">
+          <div className="wash" />
+          <div className="wrap">
+            <div className="eyebrow rv">Company</div>
+            <h1 className="rv d1">Built by people who know <span className="acc">the rules and the rails.</span></h1>
+            <p className="lead rv d2">Blocrate is a UK company, London based, Europe first, with India through a partner. We build the layer that lets a regulated institution accept, onboard and underwrite people whose income never touched a bank.</p>
+          </div>
+        </section>
+        <section>
+          <div className="wrap">
+            <div className="grid">
+              <div className="c5">
+                <div className="eyebrow rv">Why we exist</div>
+                <h2 className="rv d1">Stablecoins became money. The paperwork did not follow.</h2>
+              </div>
+              <div className="c6 o7">
+                <p className="lead rv d1">$7B of digital dollars in 2020. $308B today. Real payments, not trading, doubled last year to $400B. Revolut, Deel and ten European banks launched euro stablecoins this summer.</p>
+                <p className="ink2 mt2 measure rv d2">Every one of those payments lands in a wallet, and every one of them will one day need to be proven to a bank. We started Blocrate to be the document that gets that person a yes.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section className="band">
+          <div className="wrap">
+            <div className="grid">
+              <div className="c5">
+                <div className="eyebrow rv">How we work</div>
+                <h2 className="rv d1">Verify first. Score later.</h2>
+                <p className="lead mt2 rv d2">The playbook the bureaus ran.</p>
+              </div>
+              <div className="c6 o7">
+                <div className="ledger two rv d1">
+                  <div className="row">
+                    <div className="k">Verify income</div>
+                    <div className="a">Banks and fintechs pay us to check stablecoin income, today.</div>
+                  </div>
+                  <div className="row">
+                    <div className="k">Build the record</div>
+                    <div className="a">Who pays whom, how much, how often, for how long. A registry of verified payers.</div>
+                  </div>
+                  <div className="row">
+                    <div className="k">Lenders pull the file</div>
+                    <div className="a">A credit file and score for people the bureaus cannot see. The credit bureau for the stablecoin economy.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section>
+          <div className="wrap">
+            <div className="eyebrow rv">Team</div>
+            <div className="grid">
+              <div className="c8">
+                <h2 className="rv d1">Team of nine. Three verticals.</h2>
+                <p className="lead mt2 measure rv d2">Product, engineering and credit logic. Nine people, clear ownership.</p>
+              </div>
+            </div>
+            <div className="team mt6">
+              <div className="person rv">
+                <img src={TEAM.harnoor_singh} alt="Harnoor Singh" width="64" height="64" loading="lazy" />
+                <div>
+                  <div className="n">Harnoor Singh</div>
+                  <div className="r">Founder and CEO</div>
+                  <div className="b">Law, King's College London. Ex Covington & Burling, ex Barclays.</div>
+                </div>
+              </div>
+              <div className="person rv">
+                <img src={TEAM.udayan_sajdeh} alt="Udayan Sajdeh" width="64" height="64" loading="lazy" />
+                <div>
+                  <div className="n">Udayan Sajdeh</div>
+                  <div className="r">Co-founder, CTO</div>
+                  <div className="b">Computer Science, University of Waterloo.</div>
+                </div>
+              </div>
+              <div className="person rv">
+                <img src={TEAM.vibhu_dixit} alt="Vibhu Dixit" width="64" height="64" loading="lazy" />
+                <div>
+                  <div className="n">Vibhu Dixit</div>
+                  <div className="r">Co-founder, Data</div>
+                  <div className="b">Data Engineer, Benefi Global.</div>
+                </div>
+              </div>
+              <div className="person rv">
+                <img src={TEAM.jay_liang} alt="Jay Liang" width="64" height="64" loading="lazy" />
+                <div>
+                  <div className="n">Jay Liang</div>
+                  <div className="r">Product</div>
+                  <div className="b">Banking Law, Bristol.</div>
+                </div>
+              </div>
+              <div className="person rv">
+                <img src={TEAM.subah_malik} alt="Subah Malik" width="64" height="64" loading="lazy" />
+                <div>
+                  <div className="n">Subah Malik</div>
+                  <div className="r">Credit logic</div>
+                  <div className="b">Actuarial Analyst, Deloitte.</div>
+                </div>
+              </div>
+              <div className="person rv">
+                <img src={TEAM.valentine_vasile} alt="Valentine Vasile" width="64" height="64" loading="lazy" />
+                <div>
+                  <div className="n">Valentine Vasile</div>
+                  <div className="r">Credit logic</div>
+                  <div className="b">Quant Risk Modeller.</div>
+                </div>
+              </div>
+              <div className="person rv">
+                <img src={TEAM.anton_pryimuk} alt="Anton Pryimuk" width="64" height="64" loading="lazy" />
+                <div>
+                  <div className="n">Anton Pryimuk</div>
+                  <div className="r">Engineering</div>
+                  <div className="b">Consultant, GSK.</div>
+                </div>
+              </div>
+              <div className="person rv">
+                <img src={TEAM.suhail_ahmed} alt="Suhail Ahmed" width="64" height="64" loading="lazy" />
+                <div>
+                  <div className="n">Suhail Ahmed</div>
+                  <div className="r">Engineering</div>
+                  <div className="b">Senior Product Manager, Benefi Global.</div>
+                </div>
+              </div>
+              <div className="person rv">
+                <img src={TEAM.mateusz_adamski} alt="Mateusz Adamski" width="64" height="64" loading="lazy" />
+                <div>
+                  <div className="n">Mateusz Adamski</div>
+                  <div className="r">Engineering</div>
+                  <div className="b">Google.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section className="close">
+          <div className="bloom" />
+          <div className="wrap">
+            <div className="grid">
+              <div className="c8">
+                <h2 className="rv">Working on this too? Talk to us.</h2>
+                <p className="lead mt2 rv d1 measure">Banks, fintechs, payout platforms, lenders, and people who want to build this with us.</p>
+                <div className="cta-row rv d2">
+                  <a className="btn" href="mailto:foundersoffice@blocrate.com?subject=Blocrate%3A%20book%20a%20call">Book a call <span className="arr">→</span></a>
+                  <a className="btn ghost" href="mailto:foundersoffice@blocrate.com">Email us <span className="arr">→</span></a>
+                </div>
+              </div>
+            </div>
+            <img className="mark" src={MARK} alt="" width="796" height="595" />
+          </div>
+        </section>
+      </main>
+      <main data-page="contact" hidden>
+        <section className="hero sub">
+          <div className="wash" />
+          <div className="wrap">
+            <div className="eyebrow rv">Contact</div>
+            <h1 className="rv d1">Talk to us.</h1>
+            <p className="lead rv d2">Banks, fintechs, exchanges, payroll and payout platforms, lenders. If you have to answer “where did this money come from?”, we should talk.</p>
+          </div>
+        </section>
+        <section style={{ paddingTop: "20px" }}>
+          <div className="wrap">
+            <div className="grid" style={{ alignItems: "start" }}>
+              <div className="c4 rv">
+                <div className="cards" style={{ gridTemplateColumns: "1fr" }}>
+                  <div className="card" style={{ minHeight: "0" }}>
+                    <div>
+                      <div className="t">Email</div>
+                      <div className="d">
+                        <a href="mailto:foundersoffice@blocrate.com">foundersoffice@blocrate.com</a>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="card" style={{ minHeight: "0" }}>
+                    <div>
+                      <div className="t">WhatsApp</div>
+                      <div className="d">
+                        <a href="https://wa.me/447385818607">+44 7385 818607</a>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="card" style={{ minHeight: "0" }}>
+                    <div>
+                      <div className="t">Social</div>
+                      <div className="d"><a href="https://x.com/blocrateglobal">X @blocrateglobal</a> · <a href="https://www.linkedin.com/company/blocrate">LinkedIn</a></div>
+                    </div>
+                  </div>
+                  <div className="card" style={{ minHeight: "0" }}>
+                    <div>
+                      <div className="t">Office</div>
+                      <div className="d">London, United Kingdom</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="c7 o6 rv d1">
+                <form className="contact form">
+                  <div className="field">
+                    <label htmlFor="n">Name</label>
+                    <input id="n" name="name" required autoComplete="name" />
+                  </div>
+                  <div className="field">
+                    <label htmlFor="c">Company</label>
+                    <input id="c" name="company" autoComplete="organization" />
+                  </div>
+                  <div className="field">
+                    <label htmlFor="e">Email</label>
+                    <input id="e" name="email" type="email" required autoComplete="email" />
+                  </div>
+                  <div className="field">
+                    <label htmlFor="m">What are you trying to verify?</label>
+                    <textarea id="m" name="message" />
+                  </div>
+                  <div className="cta-row">
+                    <button className="btn" type="submit">Send <span className="arr">→</span></button>
+                    <span className="small ink3" style={{ alignSelf: "center" }}>Opens in your mail client. No data is stored on this site.</span>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+      <footer>
+        <div className="wrap">
+          <div className="top">
+            <div>
+              <a className="logo" href="#index">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="634.49 606.40 670.29 138.71" role="img" aria-label="Blocrate">
+                  <defs>
+                    <linearGradient id="bar2" gradientUnits="userSpaceOnUse" x1="1188.9" y1="732.5" x2="1278.05" y2="670.73">
+                      <stop offset="0.000" stopColor="#e0ef4c" />
+                      <stop offset="0.067" stopColor="#9ad97a" />
+                      <stop offset="0.133" stopColor="#4ec0ad" />
+                      <stop offset="0.200" stopColor="#02a8df" />
+                      <stop offset="0.267" stopColor="#2aaae6" />
+                      <stop offset="0.333" stopColor="#56aceb" />
+                      <stop offset="0.400" stopColor="#81aef0" />
+                      <stop offset="0.467" stopColor="#9da7f0" />
+                      <stop offset="0.533" stopColor="#8184dc" />
+                      <stop offset="0.600" stopColor="#635fc6" />
+                      <stop offset="0.667" stopColor="#453ab1" />
+                      <stop offset="0.733" stopColor="#463a9c" />
+                      <stop offset="0.933" stopColor="#bcc15e" />
+                      <stop offset="1.000" stopColor="#e2ec4a" />
+                    </linearGradient>
+                  </defs>
+                  <path d="M688.503 716.244 C693.125 716.244 697.026 714.597 700.206 711.302 C703.384 708.008 704.974 703.994 704.974 699.253 C704.974 694.515 703.384 690.497 700.206 687.204 C697.026 683.908 693.125 682.261 688.503 682.261 L656.429 682.261 L656.429 716.244 L688.503 716.244 Z M684.689 632.330 L656.429 632.330 L656.429 664.231 L684.689 664.231 C689.080 664.231 692.778 662.700 695.785 659.636 C698.789 656.575 700.292 652.789 700.292 648.280 C700.292 643.773 698.789 639.989 695.785 636.925 C692.778 633.864 689.080 632.330 684.689 632.330 Z M707.921 672.033 C713.236 674.807 717.397 678.622 720.404 683.476 C723.408 688.331 724.912 693.937 724.912 700.294 C724.912 710.235 721.385 718.498 714.336 725.086 C707.285 731.675 698.673 734.968 688.503 734.968 L636.490 734.968 L636.490 613.606 L684.689 613.606 C694.628 613.606 703.037 616.813 709.915 623.227 C716.790 629.642 720.231 637.648 720.231 647.241 C720.231 657.760 716.126 666.024 707.921 672.033 Z" fill="#FFFFFF" />
+                  <path d="M737.219 608.404H755.943V734.968H737.219Z" fill="#FFFFFF" />
+                  <path d="M914.577 737.222 C901.515 737.222 890.621 732.830 881.896 724.046 C873.168 715.263 868.807 704.454 868.807 691.624 C868.807 678.680 873.168 667.844 881.896 659.116 C890.621 650.391 901.515 646.026 914.577 646.026 C923.013 646.026 930.701 648.050 937.636 652.095 C944.571 656.141 949.772 661.573 953.239 668.391 L937.116 677.754 C935.149 673.593 932.175 670.328 928.187 667.958 C924.200 665.590 919.605 664.404 914.404 664.404 C906.776 664.404 900.388 667.004 895.246 672.206 C890.102 677.407 887.531 683.882 887.531 691.624 C887.531 699.369 890.102 705.841 895.246 711.042 C900.388 716.244 906.776 718.844 914.404 718.844 C919.489 718.844 924.083 717.631 928.187 715.203 C932.288 712.776 935.382 709.541 937.463 705.494 L953.586 714.683 C949.886 721.618 944.571 727.110 937.636 731.153 C930.701 735.197 923.013 737.222 914.577 737.222 Z" fill="#FFFFFF" />
+                  <path d="M1043.292 711.648 C1048.495 716.909 1055.022 719.536 1062.885 719.536 C1070.745 719.536 1077.275 716.909 1082.475 711.648 C1087.678 706.390 1090.277 699.773 1090.277 691.797 C1090.277 683.820 1087.678 677.206 1082.475 671.945 C1077.275 666.687 1070.745 664.057 1062.885 664.057 C1055.022 664.057 1048.495 666.687 1043.292 671.945 C1038.092 677.206 1035.490 683.820 1035.490 691.797 C1035.490 699.773 1038.092 706.390 1043.292 711.648 Z M1090.277 648.453 L1109.003 648.453 L1109.003 735.141 L1090.277 735.141 L1090.277 722.658 C1083.227 732.483 1073.114 737.395 1059.936 737.395 C1048.030 737.395 1037.859 732.974 1029.422 724.130 C1020.985 715.289 1016.767 704.512 1016.767 691.797 C1016.767 678.966 1020.985 668.161 1029.422 659.375 C1037.859 650.594 1048.030 646.198 1059.936 646.198 C1073.114 646.198 1083.227 651.052 1090.277 660.762 L1090.277 648.453 Z" fill="#FFFFFF" />
+                  <path d="M1175.403 666.483 L1153.906 666.483 L1153.906 708.094 C1153.906 711.678 1154.713 714.248 1156.333 715.809 C1157.949 717.369 1160.349 718.236 1163.528 718.409 C1166.706 718.582 1170.662 718.555 1175.403 718.323 L1175.403 735.140 C1161.071 736.875 1150.785 735.631 1144.542 731.413 C1138.302 727.194 1135.181 719.422 1135.181 708.094 L1135.181 666.483 L1119.232 666.483 L1119.232 648.452 L1135.181 648.452 L1135.181 629.728 L1153.906 624.180 L1153.906 648.452 L1175.403 648.452 L1175.403 666.483 Z" fill="#FFFFFF" />
+                  <path d="M1211.965 703.593 C1210.857 701.265 1210.047 698.716 1209.554 695.935 C1208.200 688.313 1209.598 681.487 1213.754 675.467 C1217.907 669.447 1223.741 665.769 1231.252 664.435 C1236.373 663.526 1241.105 663.890 1245.444 665.524 C1249.785 667.160 1253.285 669.855 1255.949 673.608 L1270.187 661.569 C1265.580 655.462 1259.509 651.024 1251.974 648.253 C1244.438 645.484 1236.514 644.835 1228.209 646.310 C1215.348 648.594 1205.385 654.797 1198.321 664.914 C1191.253 675.034 1188.854 686.466 1191.118 699.210 C1192.390 706.373 1194.932 712.648 1198.740 718.040 C1203.154 713.227 1207.224 708.073 1211.965 703.593 Z" fill="#FFFFFF" />
+                  <path d="M1265.906 704.993 C1264.652 709.368 1262.248 713.144 1258.698 716.322 C1255.146 719.503 1250.875 721.587 1245.888 722.577 C1238.405 724.063 1231.633 722.756 1225.578 718.655 C1223.967 717.565 1222.527 716.342 1221.239 715.005 C1216.885 719.474 1213.095 724.483 1208.943 729.150 C1210.791 730.898 1212.807 732.524 1215.015 734.009 C1225.284 740.927 1236.823 743.114 1249.635 740.570 C1257.911 738.928 1265.057 735.445 1271.072 730.127 C1277.087 724.811 1281.230 718.389 1283.510 710.867 L1265.906 704.993 Z" fill="#FFFFFF" />
+                  <path d="M962.197 648.564 L980.525 648.564 L980.525 665.692 L980.867 665.692 C981.438 663.294 982.551 660.955 984.208 658.670 C985.861 656.387 987.861 654.302 990.202 652.418 C992.542 650.534 995.140 649.022 997.996 647.879 C1000.848 646.739 1003.760 646.166 1006.731 646.166 C1009.014 646.166 1010.586 646.225 1011.441 646.337 C1012.298 646.452 1013.181 646.568 1014.096 646.680 L1014.096 665.521 C1012.727 665.294 1011.327 665.093 1009.900 664.921 C1008.471 664.750 1007.073 664.665 1005.704 664.665 C1002.390 664.665 999.281 665.323 996.369 666.635 C993.456 667.949 990.914 669.889 988.747 672.458 C986.576 675.027 984.864 678.196 983.608 681.965 C982.350 685.732 981.724 690.074 981.724 694.982 L981.724 737.117 L962.197 737.117 L962.197 648.564 Z" fill="#FFFFFF" />
+                  <path d="M851.599 690.728 C851.599 712.312 834.101 729.810 812.517 729.810 C790.933 729.810 773.435 712.312 773.435 690.728 C773.435 669.144 790.933 651.646 812.517 651.646 C834.101 651.646 851.599 669.144 851.599 690.728" fill="none" stroke="#FFFFFF" strokeWidth="17.0" />
+                  <path d="M1188.909 732.503 L1233.979 686.137 L1246.944 697.595 L1278.051 670.729" fill="none" stroke="url(#bar2)" strokeWidth="17" />
+                </svg>
+              </a>
+              <p className="mt2" style={{ maxWidth: "26em" }}>Proof of income for people paid in digital dollars. The payslip and bank statement for money that never touched a bank.</p>
+            </div>
+            <div>
+              <h4>Site</h4>
+              <ul>
+                <li>
+                  <a href="#product">Product</a>
+                </li>
+                <li>
+                  <a href="#company">Company</a>
+                </li>
+                <li>
+                  <a href="#contact">Contact</a>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h4>Contact</h4>
+              <ul>
+                <li>
+                  <a href="mailto:foundersoffice@blocrate.com">foundersoffice@blocrate.com</a>
+                </li>
+                <li>
+                  <a href="https://wa.me/447385818607">WhatsApp +44 7385 818607</a>
+                </li>
+                <li>London, United Kingdom</li>
+              </ul>
+            </div>
+            <div>
+              <h4>Follow</h4>
+              <ul>
+                <li>
+                  <a href="https://x.com/blocrateglobal">X @blocrateglobal</a>
+                </li>
+                <li>
+                  <a href="https://www.linkedin.com/company/blocrate">LinkedIn</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div className="bottom">
+            <span>© <span data-year="">2026</span> Blocrate. UK entity. We never hold, move or lend money. We only verify.</span>
+            <span>Not a bank. Not a lender. Not a custodian.</span>
+          </div>
         </div>
-      </div>
+      </footer>
     </>
   );
 }
