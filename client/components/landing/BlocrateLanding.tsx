@@ -1018,14 +1018,6 @@ export default function BlocrateLanding() {
                 </div>
               </div>
               <div className="person rv">
-                <img src={TEAM.vibhu_dixit} alt="Vibhu Dixit" width="64" height="64" loading="lazy" />
-                <div>
-                  <div className="n">Vibhu Dixit</div>
-                  <div className="r">Co-founder, Data</div>
-                  <div className="b">Data Engineer, Benefi Global.</div>
-                </div>
-              </div>
-              <div className="person rv">
                 <img src={TEAM.jay_liang} alt="Jay Liang" width="64" height="64" loading="lazy" />
                 <div>
                   <div className="n">Jay Liang</div>
@@ -1055,14 +1047,6 @@ export default function BlocrateLanding() {
                   <div className="n">Anton Pryimuk</div>
                   <div className="r">Engineering</div>
                   <div className="b">Consultant, GSK.</div>
-                </div>
-              </div>
-              <div className="person rv">
-                <img src={TEAM.suhail_ahmed} alt="Suhail Ahmed" width="64" height="64" loading="lazy" />
-                <div>
-                  <div className="n">Suhail Ahmed</div>
-                  <div className="r">Engineering</div>
-                  <div className="b">Senior Product Manager, Benefi Global.</div>
                 </div>
               </div>
               <div className="person rv">
